@@ -1,0 +1,25 @@
+{
+    "name": "reflexions/content-infrastructure",
+    "description": "Provides Docker and Elastic Beanstalk integration for a Laravel 5 project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Patrick Way",
+            "email": "patrick@reflexions.co"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+    },
+    "extra": {
+    },
+    "autoload": {
+        "psr-0": {
+            "Reflexions\\Content\\Infrastructure": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
