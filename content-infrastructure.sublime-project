@@ -1,0 +1,30 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+	"settings":
+    {
+        "tab_size": 4,
+        "translate_tabs_to_spaces": true,
+        "detect_indentation": false,
+        "use_tab_stops": true,
+        "auto_indent": true,
+		"smart_indent": true,
+		"trim_automatic_white_space": true,
+		"indent_to_bracket": false
+    },
+    "build_systems":
+    [
+        // {
+        //     "name": "Grunt",
+        //     "cmd": ["grunt"]
+        // },
+        // {
+        //     "name": "migrate:refresh",
+        //     "cmd": ["php artisan migrate:refresh --seed"]
+        // }
+    ]
+}
