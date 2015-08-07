@@ -29,6 +29,13 @@
 
         php artisan vendor:publish
 
+## Configuration
+
+Most laravel .env settings can be passed through *except* DB_HOST.  If you want to connect to localhost, this will need to be the IP address for your local host set by the docker install
+
+* Kitematic: localhost is available via 192.168.99.1
+* boot2docker: localhost is available via 192.168.59.3
+
 ## Usage
 
 Build the image
