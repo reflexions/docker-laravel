@@ -23,11 +23,13 @@
 
         php artisan vendor:publish
 
-5. Build the image
+## Usage
+
+Build the image
 
         docker build -t application:v1 .
 
-6. Run the image
+Run the image
 
         env $(cat .env | xargs) docker run \
             -e APP_DEBUG \
@@ -40,14 +42,16 @@
             -v `pwd`:/var/www/application \
             -d application:v1
 
-7. Attach a shell and inspect the image
+Attach a shell and inspect the image
 
         docker exec -it $(docker ps | grep application:v1 | awk '{print $1}') bash
 
-8. Cleanup: Remove exited containers
+## Cleanup
+
+Remove exited containers
 
         docker rm -v $(docker ps -a -f status=exited -q)
 
-9. Cleanup: Remove untagged images
+Remove untagged images
 
         docker rmi $(docker images --no-trunc | grep "<none>" | awk '{print $3}')
