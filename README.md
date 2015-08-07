@@ -18,8 +18,14 @@
 3. Add the service provider to config/app.php
 
         'Reflexions\Content\Infrastructure\InfrastructureServiceProvider',
+        
+4. Change the Application class in bootstrap/app.php
 
-4. Publish the Dockerfile into the project
+        $app = new Reflexions\Content\Infrastructure\Application(
+	    realpath(__DIR__.'/../')
+        );
+
+5. Publish the Dockerfile into the project
 
         php artisan vendor:publish
 
