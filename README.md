@@ -22,7 +22,7 @@
 4. Change the Application class in bootstrap/app.php
 
         $app = new Reflexions\Content\Infrastructure\Application(
-	    realpath(__DIR__.'/../')
+            realpath(__DIR__.'/../')
         );
 
 5. Publish the Dockerfile into the project
