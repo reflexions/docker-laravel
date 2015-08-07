@@ -4,7 +4,7 @@
 
 1. Install [Kitematic](https://kitematic.com/) to get docker
 
-2. Add the following repository to composer.json
+2. Add the following repository to _composer.json_
 
         "repositories": [
             {
@@ -17,17 +17,17 @@
 
         composer require reflexions/content-infrastructure dev-master
 
-4. Add the service provider to config/app.php
+4. Add the service provider to _config/app.php_
 
         'Reflexions\Content\Infrastructure\InfrastructureServiceProvider',
         
-5. Change the Application class in bootstrap/app.php
+5. Change the Application class in _bootstrap/app.php_
 
         $app = new Reflexions\Content\Infrastructure\Application(
             realpath(__DIR__.'/../')
         );
 
-6. Publish the Dockerfile into the project
+6. Publish the _Dockerfile_ into the project
 
         php artisan vendor:publish
 
