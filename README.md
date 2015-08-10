@@ -23,7 +23,7 @@
         "repositories": [
             {
                 "url": "https://github.com/reflexions/content-infrastructure.git",
-                "type": "git"
+                "type": "vcs"
             }
         ],
 
