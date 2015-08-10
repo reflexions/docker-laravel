@@ -29,7 +29,7 @@
 
 3. From the shell run composer to require the package
 
-        composer require reflexions/content-infrastructure dev-master
+        composer require --prefer-source reflexions/content-infrastructure dev-master
 
 4. Add the service provider to _config/app.php_
 
