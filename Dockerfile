@@ -72,6 +72,7 @@ ENV DB_HOST localhost
 ENV DB_PASSWORD application
 ENV DB_USERNAME application
 ENV DEVELOPER_EMAIL team@reflexions.co
+ENV GITHUB_TOKEN your-github-token
 
 COPY . /var/www/application
 WORKDIR /var/www/application
@@ -87,32 +88,14 @@ RUN mkdir /var/run/application && \
 
     # permissions and start script
     chown -R www-data /var/run/application && \
-    chmod -R 775 /var/run/application
-
-    # get reflexions/content-infrastructure
-RUN composer install
-
-    # install reflexions/content-infrastructure
-RUN cp vendor/reflexions/content-infrastructure/001-application.conf /etc/apache2/sites-available/ && \
-    ln -s /etc/apache2/sites-available/001-application.conf /etc/apache2/sites-enabled/ && \
-    unlink /etc/apache2/sites-enabled/000-default.conf && \
-    
-    # crontab
-    cp vendor/reflexions/content-infrastructure/crontab /var/spool/cron/crontabs/www-data && \
-    chown www-data.crontab /var/spool/cron/crontabs/www-data && \
-    chmod 0600 /var/spool/cron/crontabs/www-data && \
-
-    # supervisor
-    cp vendor/reflexions/content-infrastructure/supervisord.conf /etc/supervisor/ && \
-    cp vendor/reflexions/content-infrastructure/supervisor.conf.d/* /etc/supervisor/conf.d/ && \
-    mkdir /var/run/application/logs/supervisor/ && \
-
-    # double check permissions
-    chown -R www-data /var/run/application && \
     chmod -R 775 /var/run/application && \
 
+    # setup script.  Runs on container startup to utilize GITHUB_TOKEN env variable
+    cp resources/content-infrastructure/setup.sh /setup.sh && \
+    chmod 755 /setup.sh && \
+
     # start script
-    cp vendor/reflexions/content-infrastructure/start.sh /start.sh && \
+    cp resources/content-infrastructure/start.sh /start.sh && \
     chmod 755 /start.sh
 
 EXPOSE 80
