@@ -4,8 +4,12 @@
 
 1. Install [Kitematic](https://kitematic.com/) to get docker
 
-2. Add the following repository to _composer.json_
+2. Add a [GitHub token](https://github.com/settings/tokens/new) and the following repository to _composer.json_
 
+        "config": {
+            "preferred-install": "dist",
+            "github.com": "YOUR GITHUB TOKEN HERE"
+        },
         "repositories": [
             {
                 "url": "https://github.com/reflexions/content-infrastructure.git",
