@@ -2,7 +2,9 @@
 
 ## Installation
 
-1. Add the following repository to composer.json
+1. Install [Kitematic](https://kitematic.com/) to get docker
+
+2. Add the following repository to _composer.json_
 
         "repositories": [
             {
@@ -11,23 +13,37 @@
             }
         ],
 
-2. From the shell run composer to require the package
+3. From the shell run composer to require the package
 
         composer require reflexions/content-infrastructure dev-master
 
-3. Add the service provider to config/app.php
+4. Add the service provider to _config/app.php_
 
         'Reflexions\Content\Infrastructure\InfrastructureServiceProvider',
         
-4. Change the Application class in bootstrap/app.php
+5. Change the Application class in _bootstrap/app.php_
 
         $app = new Reflexions\Content\Infrastructure\Application(
             realpath(__DIR__.'/../')
         );
 
-5. Publish the Dockerfile into the project
+6. Publish the _Dockerfile_ into the project
 
         php artisan vendor:publish
+
+## Configuration
+
+Most laravel .env settings can be passed through *except* DB_HOST.  The container will consider itself to be localhost.  To connect to a database running locally but outside of docker use the IP address of the host system as set by the docker install:
+
+* Kitematic: host is available via 192.168.99.1
+* boot2docker: host is available via 192.168.59.3
+
+Also the db needs to be configured appropriately to allow connections from the docker container:
+
+* MySQL needs to be started with "--bind-address=0.0.0.0".  This may require editing the LaunchAgent plist file.
+* MySQL permissions need to be granted to the appropriate subnet i.e. 
+
+        GRANT ALL PRIVILEGES ON db_name.* TO 'username'@'192.168.99.%' IDENTIFIED BY 'password' WITH GRANT OPTION;
 
 ## Usage
 
