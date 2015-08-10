@@ -76,19 +76,26 @@ ENV DEVELOPER_EMAIL team@reflexions.co
 COPY . /var/www/application
 WORKDIR /var/www/application
 
-    # apache
-RUN cp vendor/reflexions/content-infrastructure/001-application.conf /etc/apache2/sites-available/ && \
-    ln -s /etc/apache2/sites-available/001-application.conf /etc/apache2/sites-enabled/ && \
-    unlink /etc/apache2/sites-enabled/000-default.conf && \
-
-    # apache run dirs
-    mkdir /var/run/application && \
+    # application run dirs
+RUN mkdir /var/run/application && \
     mkdir /var/run/application/app && \
     mkdir /var/run/application/framework && \
     mkdir /var/run/application/framework/sessions && \
     mkdir /var/run/application/framework/views && \
     mkdir /var/run/application/framework/cache && \
     mkdir /var/run/application/logs && \
+
+    # permissions and start script
+    chown -R www-data /var/run/application && \
+    chmod -R 775 /var/run/application
+
+    # get reflexions/content-infrastructure
+RUN composer install
+
+    # install reflexions/content-infrastructure
+RUN cp vendor/reflexions/content-infrastructure/001-application.conf /etc/apache2/sites-available/ && \
+    ln -s /etc/apache2/sites-available/001-application.conf /etc/apache2/sites-enabled/ && \
+    unlink /etc/apache2/sites-enabled/000-default.conf && \
     
     # crontab
     cp vendor/reflexions/content-infrastructure/crontab /var/spool/cron/crontabs/www-data && \
@@ -100,15 +107,13 @@ RUN cp vendor/reflexions/content-infrastructure/001-application.conf /etc/apache
     cp vendor/reflexions/content-infrastructure/supervisor.conf.d/* /etc/supervisor/conf.d/ && \
     mkdir /var/run/application/logs/supervisor/ && \
 
-    # permissions and start script
+    # double check permissions
     chown -R www-data /var/run/application && \
     chmod -R 775 /var/run/application && \
+
+    # start script
     cp vendor/reflexions/content-infrastructure/start.sh /start.sh && \
     chmod 755 /start.sh
-
-# Elastic Beanstalk deploy skips .gitignore'd directories
-# Frontend build should be run and committed to public/build
-RUN composer install
 
 EXPOSE 80
 ENTRYPOINT ["/start.sh"]
