@@ -1,15 +1,25 @@
 # content-infrastructure
 
-## Installation
+## Installation into a laravel 5 project
 
-1. Install [Kitematic](https://kitematic.com/) to get docker
+1. Configure composer to use your [GitHub token](https://github.com/settings/tokens/new)
 
-2. Add a [GitHub token](https://github.com/settings/tokens/new) and the following repository to _composer.json_
+        composer config -g github-oauth.github.com YOUR-GITHUB-TOKEN-HERE
 
-        "config": {
-            "preferred-install": "dist",
-            "github.com": "YOUR GITHUB TOKEN HERE"
-        },
+2. Add the GITHUB_TOKEN to your .env file along with the rest of your application's config
+
+        APP_DEBUG=true
+        DB_DATABASE=application
+        DB_HOST=192.168.99.1
+        DB_PASSWORD=password
+        DB_USERNAME=username
+        DEVELOPER_EMAIL=you@reflexions.co
+        GITHUB_TOKEN=YOUR-GITHUB-TOKEN-HERE
+
+2. Install [Kitematic](https://kitematic.com/) to get docker
+
+3. Add the following repository to _composer.json_
+
         "repositories": [
             {
                 "url": "https://github.com/reflexions/content-infrastructure.git",
@@ -35,9 +45,9 @@
 
         php artisan vendor:publish
 
-## Configuration
+## Container Configuration
 
-Most laravel .env settings can be passed through *except* DB_HOST.  The container will consider itself to be localhost.  To connect to a database running locally but outside of docker use the IP address of the host system as set by the docker install:
+Most laravel .env settings will be the same *except* DB_HOST.  The container will consider itself to be localhost.  To connect to a database running locally but outside of docker use the IP address of the host system as set by the docker install:
 
 * Kitematic: host is available via 192.168.99.1
 * boot2docker: host is available via 192.168.59.3
@@ -64,6 +74,7 @@ Run the image
             -e DB_PASSWORD \
             -e DB_USERNAME \
             -e DEVELOPER_EMAIL \
+            -e GITHUB_TOKEN \
             -p 80:80 \
             -v `pwd`:/var/www/application \
             -d application:v1
