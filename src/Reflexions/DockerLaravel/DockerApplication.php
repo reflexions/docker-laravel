@@ -1,7 +1,7 @@
 <?php
-namespace Reflexions\Docker\Laravel;
+namespace Reflexions\DockerLaravel;
 
-class Application extends \Illuminate\Foundation\Application
+class DockerApplication extends \Illuminate\Foundation\Application
 {
 	/**
      * Get the path to the storage directory.

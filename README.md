@@ -20,26 +20,34 @@
 
 3. Add the following repository to _composer.json_
 
-        "repositories": [
-            {
-                "url": "https://github.com/reflexions/docker-laravel.git",
-                "type": "vcs"
-            }
-        ],
+```json
+    "repositories": [
+        {
+            "url": "https://github.com/reflexions/docker-laravel.git",
+            "type": "vcs"
+        }
+    ],
+```
 
 3. From the shell run composer to require the package
 
-        composer require --prefer-source reflexions/docker-laravel dev-master
+```bash
+composer require --prefer-source reflexions/docker-laravel dev-master
+```
 
 4. Add the service provider to _config/app.php_
 
-        'Reflexions\Docker\Laravel\InfrastructureServiceProvider',
-        
+```php
+        Reflexions\DockerLaravel\DockerServiceProvider::class,
+```
+
 5. Change the Application class in _bootstrap/app.php_
 
-        $app = new Reflexions\Docker\Laravel\Application(
-            realpath(__DIR__.'/../')
-        );
+```php
+$app = new Reflexions\DockerLaravel\DockerApplication(
+    realpath(__DIR__.'/../')
+);
+```
 
 6. Publish the _Dockerfile_ and _docker-compose.yml_ into the project
 
