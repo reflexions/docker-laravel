@@ -52,15 +52,22 @@ mv example.env .env
 ```
 
 ```bash
+GITHUB_TOKEN=your_github_token_here
+
 APP_ENV=local
 APP_DEBUG=true
 APP_KEY=SomeRandomString
 APP_STORAGE=/var/run/application
 
-DB_HOST=localhost
-DB_DATABASE=homestead
-DB_USERNAME=homestead
-DB_PASSWORD=secret
+DB_HOST=postgres
+DB_DATABASE=application
+DB_USERNAME=laravel
+DB_PASSWORD=password
+
+# Match DB_USERNAME, DB_PASSWORD, and DB_DATABASE above
+POSTGRES_DB=application
+POSTGRES_USER=laravel
+POSTGRES_PASSWORD=password
 
 CACHE_DRIVER=file
 SESSION_DRIVER=file
@@ -71,8 +78,6 @@ MAIL_HOST=mailtrap.io
 MAIL_PORT=2525
 MAIL_USERNAME=null
 MAIL_PASSWORD=null
-
-GITHUB_TOKEN=YOUR-GITHUB-TOKEN-HERE
 ```
 
 9. Generate a secure key

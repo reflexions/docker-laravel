@@ -3,5 +3,13 @@ laravel:
   ports:
     - 80:80
   env_file: .env
+  links:
+    - postgres
   volumes:
     - .:/var/www/application
+
+postgres:
+  image: postgres:9.4.4
+  env_file: .env
+  environment:
+    LC_ALL: C.UTF-8
