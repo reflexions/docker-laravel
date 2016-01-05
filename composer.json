@@ -1,5 +1,5 @@
 {
-    "name": "reflexions/content-infrastructure",
+    "name": "reflexions/docker-laravel",
     "description": "Provides Docker and Elastic Beanstalk integration for a Laravel 5 project",
     "license": "proprietary",
     "authors": [
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Reflexions\\Content\\Infrastructure": "src/"
+            "Reflexions\\Docker\\Laravel": "src/"
         }
     },
     "minimum-stability": "dev",

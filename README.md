@@ -1,4 +1,4 @@
-# content-infrastructure
+# docker-laravel
 
 ## Installation into a laravel 5 project
 
@@ -16,32 +16,32 @@
         DEVELOPER_EMAIL=you@reflexions.co
         GITHUB_TOKEN=YOUR-GITHUB-TOKEN-HERE
 
-2. Install [Kitematic](https://kitematic.com/) to get docker
+2. Install [Docker Toolbox](https://www.docker.com/docker-toolbox) to get docker, docker-compose, and the Kitematic GUI
 
 3. Add the following repository to _composer.json_
 
         "repositories": [
             {
-                "url": "https://github.com/reflexions/content-infrastructure.git",
+                "url": "https://github.com/reflexions/docker-laravel.git",
                 "type": "vcs"
             }
         ],
 
 3. From the shell run composer to require the package
 
-        composer require --prefer-source reflexions/content-infrastructure dev-master
+        composer require --prefer-source reflexions/docker-laravel dev-master
 
 4. Add the service provider to _config/app.php_
 
-        'Reflexions\Content\Infrastructure\InfrastructureServiceProvider',
+        'Reflexions\Docker\Laravel\InfrastructureServiceProvider',
         
 5. Change the Application class in _bootstrap/app.php_
 
-        $app = new Reflexions\Content\Infrastructure\Application(
+        $app = new Reflexions\Docker\Laravel\Application(
             realpath(__DIR__.'/../')
         );
 
-6. Publish the _Dockerfile_ into the project
+6. Publish the _Dockerfile_ and _docker-compose.yml_ into the project
 
         php artisan vendor:publish
 

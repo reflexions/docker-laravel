@@ -1,5 +1,5 @@
 <?php
-namespace Reflexions\Content\Infrastructure;
+namespace Reflexions\Docker\Laravel;
 
 class Application extends \Illuminate\Foundation\Application
 {
