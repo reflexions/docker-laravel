@@ -91,11 +91,11 @@ RUN mkdir /var/run/application && \
     chmod -R 775 /var/run/application && \
 
     # setup script.  Runs on container startup to utilize GITHUB_TOKEN env variable
-    cp vendor/reflexions/docker-laravel/setup.sh /setup.sh && \
+    cp vendor/reflexions/docker-laravel/bin/setup.sh /setup.sh && \
     chmod 755 /setup.sh && \
 
     # start script
-    cp vendor/reflexions/docker-laravel/start.sh /start.sh && \
+    cp vendor/reflexions/docker-laravel/bin/start.sh /start.sh && \
     chmod 755 /start.sh
 
 EXPOSE 80

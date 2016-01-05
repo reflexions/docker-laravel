@@ -1,0 +1,7 @@
+laravel:
+  build: .
+  ports:
+    - 80:80
+  env_file: .env
+  volumes:
+    - .:/var/www/application
