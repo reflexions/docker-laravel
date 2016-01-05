@@ -6,16 +6,6 @@
 
         composer config -g github-oauth.github.com YOUR-GITHUB-TOKEN-HERE
 
-2. Add the GITHUB_TOKEN to your .env file along with the rest of your application's config
-
-        APP_DEBUG=true
-        DB_DATABASE=application
-        DB_HOST=192.168.99.1
-        DB_PASSWORD=password
-        DB_USERNAME=username
-        DEVELOPER_EMAIL=you@reflexions.co
-        GITHUB_TOKEN=YOUR-GITHUB-TOKEN-HERE
-
 2. Install [Docker Toolbox](https://www.docker.com/docker-toolbox) to get docker, docker-compose, and the Kitematic GUI
 
 3. Add the following repository to _composer.json_
@@ -29,19 +19,19 @@
     ],
 ```
 
-3. From the shell run composer to require the package
+4. From the shell run composer to require the package
 
 ```bash
 composer require --prefer-source reflexions/docker-laravel dev-master
 ```
 
-4. Add the service provider to _config/app.php_
+5. Add the service provider to _config/app.php_
 
 ```php
         Reflexions\DockerLaravel\DockerServiceProvider::class,
 ```
 
-5. Change the Application class in _bootstrap/app.php_
+6. Change the Application class in _bootstrap/app.php_
 
 ```php
 $app = new Reflexions\DockerLaravel\DockerApplication(
@@ -49,9 +39,48 @@ $app = new Reflexions\DockerLaravel\DockerApplication(
 );
 ```
 
-6. Publish the _Dockerfile_ and _docker-compose.yml_ into the project
+7. Publish the _Dockerfile_, _docker-compose.yml_, and _example.env_ into the project
 
-        php artisan vendor:publish
+```bash
+php artisan vendor:publish
+```
+
+8. Copy _example.env_ to _.env_.  Update the GITHUB_TOKEN along with the rest of the config.
+
+```bash
+mv example.env .env
+```
+
+```bash
+APP_ENV=local
+APP_DEBUG=true
+APP_KEY=SomeRandomString
+APP_STORAGE=/var/run/application
+
+DB_HOST=localhost
+DB_DATABASE=homestead
+DB_USERNAME=homestead
+DB_PASSWORD=secret
+
+CACHE_DRIVER=file
+SESSION_DRIVER=file
+QUEUE_DRIVER=sync
+
+MAIL_DRIVER=smtp
+MAIL_HOST=mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+
+GITHUB_TOKEN=YOUR-GITHUB-TOKEN-HERE
+```
+
+9. Generate a secure key
+
+```bash
+$ php artisan key:generate
+Application key [od6nnP2rPMobEXaP2vNBVBj9Hev000mG] set successfully.
+```
 
 ## Container Configuration
 
