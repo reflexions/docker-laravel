@@ -28,24 +28,20 @@ if [ ! -f /var/www/laravel/app ]; then
 	cd /var/www/laravel
     composer create-project --prefer-dist laravel/laravel /tmp/laravel
     rm /tmp/laravel/.env
-    mv /tmp/* /var/www/laravel
-    mv /tmp/.* /var/www/laravel
+    mv /tmp/laravel/* /var/www/laravel
+    mv /tmp/laravel/.???* /var/www/laravel
     rm -Rf /tmp/laravel
+    php artisan key:generate
+	cd /usr/share/docker-laravel
 fi
 
 # maybe install reflexions/docker-laravel
 if [ ! -f /var/www/laravel/vendor/reflexions/docker-laravel ]; then
 	cd /var/www/laravel
 	composer require reflexions/docker-laravel
+	sed -i 's/Illuminate\\Foundation\\Application/Reflexions\\DockerLaravel\\DockerApplication/g' /var/www/laravel/bootstrap/app.php
+	cd /usr/share/docker-laravel
 fi
-
-# 8. Change the Application class in _bootstrap/app.php_
-# ```php
-# $app = new Reflexions\DockerLaravel\DockerApplication(
-#     realpath(__DIR__.'/../')
-# );
-# ```
-
 
 # flag that setup has run
 touch /var/run/laravel/setup-completed
