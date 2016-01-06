@@ -64,7 +64,8 @@ RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/apache2/php.ini
 
 # application run dirs
-RUN mkdir /var/run/laravel/storage && \
+RUN mkdir /var/run/laravel && \
+    mkdir /var/run/laravel/storage && \
     mkdir /var/run/laravel/storage/app && \
     mkdir /var/run/laravel/storage/framework && \
     mkdir /var/run/laravel/storage/framework/sessions && \
