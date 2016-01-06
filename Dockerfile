@@ -63,40 +63,52 @@ RUN curl -sS https://getcomposer.org/installer | php && \
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/cli/php.ini
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/apache2/php.ini
 
-# Configure buyerfirst-web
+# application run dirs
+RUN mkdir /var/run/laravel && \
+    mkdir /var/run/laravel/app && \
+    mkdir /var/run/laravel/framework && \
+    mkdir /var/run/laravel/framework/sessions && \
+    mkdir /var/run/laravel/framework/views && \
+    mkdir /var/run/laravel/framework/cache && \
+    mkdir /var/run/laravel/logs && \
+    chown -R www-data /var/run/laravel && \
+    chmod -R 775 /var/run/laravel
+
+# Configuration
+ENV APP_STORAGE /var/run/laravel
+
 ENV APP_ENV local
 ENV APP_DEBUG true
-ENV APP_STORAGE /var/run/application
+ENV APP_KEY SomeRandomString
+
+ENV DB_HOST postgres
 ENV DB_DATABASE application
-ENV DB_HOST localhost
-ENV DB_PASSWORD application
-ENV DB_USERNAME application
-ENV DEVELOPER_EMAIL team@reflexions.co
-ENV GITHUB_TOKEN your-github-token
+ENV DB_USERNAME laravel
+ENV DB_PASSWORD password
 
-COPY . /var/www/application
-WORKDIR /var/www/application
+# Match DB_USERNAME, DB_PASSWORD, and DB_DATABASE above
+ENV POSTGRES_DB application
+ENV POSTGRES_USER laravel
+ENV POSTGRES_PASSWORD password
 
-    # application run dirs
-RUN mkdir /var/run/application && \
-    mkdir /var/run/application/app && \
-    mkdir /var/run/application/framework && \
-    mkdir /var/run/application/framework/sessions && \
-    mkdir /var/run/application/framework/views && \
-    mkdir /var/run/application/framework/cache && \
-    mkdir /var/run/application/logs && \
+ENV CACHE_DRIVER file
+ENV SESSION_DRIVER file
+ENV QUEUE_DRIVER sync
 
-    # permissions and start script
-    chown -R www-data /var/run/application && \
-    chmod -R 775 /var/run/application && \
+ENV MAIL_DRIVER smtp
+ENV MAIL_HOST mailtrap.io
+ENV MAIL_PORT 2525
+ENV MAIL_USERNAME null
+ENV MAIL_PASSWORD null
 
-    # setup script.  Runs on container startup to utilize GITHUB_TOKEN env variable
-    cp vendor/reflexions/docker-laravel/bin/setup.sh /setup.sh && \
-    chmod 755 /setup.sh && \
+# start and setup scripts
+# setup script runs on container startup to utilize GITHUB_TOKEN env variable
+COPY . /usr/share/docker-laravel
+WORKDIR /usr/share/docker-laravel
+RUN chmod 755 /usr/share/docker-laravel/bin/setup.sh && \
+    chmod 755 /usr/share/docker-laravel/bin/start.sh
+ENTRYPOINT ["/usr/share/docker-laravel/bin/start.sh"]
 
-    # start script
-    cp vendor/reflexions/docker-laravel/bin/start.sh /start.sh && \
-    chmod 755 /start.sh
 
+WORKDIR /var/www/laravel
 EXPOSE 80
-ENTRYPOINT ["/start.sh"]
