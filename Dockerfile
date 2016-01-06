@@ -71,9 +71,9 @@ RUN mkdir /var/run/laravel && \
     mkdir /var/run/laravel/storage/framework/sessions && \
     mkdir /var/run/laravel/storage/framework/views && \
     mkdir /var/run/laravel/storage/framework/cache && \
+    mkdir /var/run/laravel/storage/logs && \
     mkdir /var/run/laravel/bootstrap && \
     mkdir /var/run/laravel/bootstrap/cache && \
-    mkdir /var/run/laravel/logs && \
     chown -R www-data /var/run/laravel && \
     chmod -R 775 /var/run/laravel
 

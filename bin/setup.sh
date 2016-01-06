@@ -21,7 +21,7 @@ chmod 0600 /var/spool/cron/crontabs/www-data
 # supervisor
 cp etc/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
 cp etc/supervisor/conf.d/* /etc/supervisor/conf.d/
-mkdir /var/run/laravel/logs/supervisor/
+mkdir /var/run/laravel/storage/logs/supervisor/
 
 # maybe install laravel
 if [ ! -f /var/www/laravel/app ]; then
@@ -36,6 +36,13 @@ if [ ! -f /var/www/laravel/app ]; then
 fi
 
 # maybe install reflexions/docker-laravel
+#   - maybe it's just .gitignore'd
+if [ ! -f /var/www/laravel/vendor/reflexions/docker-laravel ]; then
+	cd /var/www/laravel
+	composer install
+	cd /usr/share/docker-laravel
+fi
+#   - or maybe it needs to be installed
 if [ ! -f /var/www/laravel/vendor/reflexions/docker-laravel ]; then
 	cd /var/www/laravel
 	composer require reflexions/docker-laravel
