@@ -37,6 +37,7 @@ APP_ENV=local
 APP_DEBUG=true
 APP_KEY=SomeRandomString
 
+DB_CONNECTION=postgres
 DB_HOST=postgres
 DB_DATABASE=application
 DB_USERNAME=laravel
