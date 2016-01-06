@@ -64,18 +64,21 @@ RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/apache2/php.ini
 
 # application run dirs
-RUN mkdir /var/run/laravel && \
-    mkdir /var/run/laravel/app && \
-    mkdir /var/run/laravel/framework && \
-    mkdir /var/run/laravel/framework/sessions && \
-    mkdir /var/run/laravel/framework/views && \
-    mkdir /var/run/laravel/framework/cache && \
+RUN mkdir /var/run/laravel/storage && \
+    mkdir /var/run/laravel/storage/app && \
+    mkdir /var/run/laravel/storage/framework && \
+    mkdir /var/run/laravel/storage/framework/sessions && \
+    mkdir /var/run/laravel/storage/framework/views && \
+    mkdir /var/run/laravel/storage/framework/cache && \
+    mkdir /var/run/laravel/bootstrap && \
+    mkdir /var/run/laravel/bootstrap/cache && \
     mkdir /var/run/laravel/logs && \
     chown -R www-data /var/run/laravel && \
     chmod -R 775 /var/run/laravel
 
 # Configuration
-ENV APP_STORAGE /var/run/laravel
+ENV LARAVEL_STORAGE_PATH /var/run/laravel/storage
+ENV LARAVEL_BOOTSTRAP_CACHE_PATH /var/run/laravel/bootstrap/cache
 
 ENV APP_ENV local
 ENV APP_DEBUG true
