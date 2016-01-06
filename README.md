@@ -29,7 +29,7 @@ postgres:
     LC_ALL: C.UTF-8
 ```
 
-3.) Obtain a [Github Personal Access Token](https://github.com/settings/tokens/new).  In the project directory create _.env_ file with the GITHUB_TOKEN
+3.) Obtain a [Github Personal Access Token](https://github.com/settings/tokens/new).  In the project directory create a laravel _.env_ file with the GITHUB_TOKEN
 
 ```bash
 GITHUB_TOKEN=Your_Github_Token
