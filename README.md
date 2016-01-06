@@ -1,15 +1,15 @@
 # docker-laravel
 
 - Provides laravel docker image.
-- Installs fresh laravel 5.2 if started in empty directory.
-- Installs _reflexions/docker-laravel_ package if started in existing laravel app.
+- Installs fresh laravel 5.2 if added to empty directory.
+- Installs `reflexions/docker-laravel` package if added to existing laravel app.
 - Installs `Reflexions\DockerLaravel\DockerApplication` into _bootstrap/app.php_ to prevent permissions errors.
 
 ## Instructions
 
-1. Install [Docker Toolbox](https://www.docker.com/docker-toolbox) to get docker, docker-compose, and the Kitematic GUI
+1) Install [Docker Toolbox](https://www.docker.com/docker-toolbox) to get docker, docker-compose, and the Kitematic GUI
 
-2. In the project directory create _docker-compose.yml_
+2) In the project directory create _docker-compose.yml_
 
 ```yaml
 laravel:
@@ -29,7 +29,7 @@ postgres:
     LC_ALL: C.UTF-8
 ```
 
-3. Obtain a [Github Personal Access Token](https://github.com/settings/tokens/new).  In the project directory create _.env_ file with the GITHUB_TOKEN
+3) Obtain a [Github Personal Access Token](https://github.com/settings/tokens/new).  In the project directory create _.env_ file with the GITHUB_TOKEN
 
 ```bash
 GITHUB_TOKEN=Your_Github_Token
@@ -58,7 +58,7 @@ MAIL_USERNAME=null
 MAIL_PASSWORD=null
 ```
 
-4. Start containers
+4) Start containers
 
 ```bash
 docker-compose up
