@@ -61,6 +61,36 @@ docker-compose up
 docker exec -it $(docker ps | grep reflexions/docker-laravel | awk '{print $1}') bash
 ```
 
+#### Overview
+
+- Runs setup script first time
+- Uses github token to avoid composer rate limit errors
+- Downloads fresh laravel 5.2 if the _app_ directory is missing
+- Adds dependency on `reflexions/docker-laravel` composer package
+- Updates _bootstrap/app.php_ to use `Reflexions\DockerLaravel\DockerApplication` to prevent permissions errors
+
+
+#### Front-end build systems
+
+Front-end build systems (gulp, grunt, bower, etc) are best installed outside of docker.  The resulting assets will be readily accessible via the volume mapping defined on the laravel service.
+
+
+#### Elastic Beanstalk
+
+Add a _Dockerfile_ to the root of the project to deploy with Elastic Beanstalk:
+
+```
+FROM reflexions/docker-laravel:latest
+
+MAINTAINER "Your Name" <your@email.com>
+
+COPY . /var/www/laravel
+WORKDIR /var/www/laravel
+
+EXPOSE 80
+ENTRYPOINT ["/usr/share/docker-laravel/bin/start.sh"]
+```
+
 #### Troubleshooting
 
 **Problem:** Mac OS X: Couldn't connect to docker daemon
@@ -99,33 +129,3 @@ _**Solution:**_ Known issue with the Docker Toolbox on older CPUs.  Install dock
 _**Solution:**_
   - Check that the DB_CONNECTION corresponds to the correct laravel db driver
   - Check that the DB_HOST corresponds to the name of the service listed in docker-compose.yml (i.e. "database" in the example above)
-
-#### Overview
-
-- Runs setup script first time
-- Uses github token to avoid composer rate limit errors
-- Downloads fresh laravel 5.2 if the _app_ directory is missing
-- Adds dependency on `reflexions/docker-laravel` composer package
-- Updates _bootstrap/app.php_ to use `Reflexions\DockerLaravel\DockerApplication` to prevent permissions errors
-
-
-#### Front-end build systems
-
-Front-end build systems (gulp, grunt, bower, etc) are best installed outside of docker.  The resulting assets will be readily accessible via the volume mapping defined on the laravel service.
-
-
-#### Elastic Beanstalk
-
-Add a _Dockerfile_ to the root of the project to deploy with Elastic Beanstalk:
-
-```
-FROM reflexions/docker-laravel:latest
-
-MAINTAINER "Your Name" <your@email.com>
-
-COPY . /var/www/laravel
-WORKDIR /var/www/laravel
-
-EXPOSE 80
-ENTRYPOINT ["/usr/share/docker-laravel/bin/start.sh"]
-```
