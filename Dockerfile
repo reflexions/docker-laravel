@@ -44,6 +44,16 @@ RUN apt-get update && \
 	    php5-redis 							\
 	    php5-sqlite
 
+# https://github.com/nodejs/node-v0.x-archive/wiki/Installing-Node.js-via-package-manager
+# RUN curl -sL https://deb.nodesource.com/setup_5.x | bash - && \
+#	apt-get update && \
+#    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+#		nodejs \
+#		build-essential
+#
+# RUN npm install -g bower && \
+#    npm install -g gulp
+
 # Configure apache2
 RUN a2enmod php5 && \
 	a2enmod rewrite
