@@ -20,7 +20,6 @@ mkdir ${LARAVEL_STORAGE_PATH}/framework/sessions
 mkdir ${LARAVEL_STORAGE_PATH}/framework/views
 mkdir ${LARAVEL_STORAGE_PATH}/framework/cache
 mkdir ${LARAVEL_STORAGE_PATH}/logs
-mkdir ${LARAVEL_STORAGE_PATH}/logs/supervisor/
 chown -R www-data ${LARAVEL_STORAGE_PATH}
 chmod -R 775 ${LARAVEL_STORAGE_PATH}
 
@@ -38,17 +37,6 @@ composer install
 cp etc/apache2/sites-available/001-application.conf /etc/apache2/sites-available/001-application.conf
 ln -s /etc/apache2/sites-available/001-application.conf /etc/apache2/sites-enabled/
 unlink /etc/apache2/sites-enabled/000-default.conf
-    
-# crontab
-cp etc/crontab /var/spool/cron/crontabs/www-data
-chown www-data.crontab /var/spool/cron/crontabs/www-data
-chmod 0600 /var/spool/cron/crontabs/www-data
-
-# supervisor
-mkdir /etc/supervisor
-mkdir /etc/supervisor/conf.d
-cp etc/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
-cp etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 
 # maybe install laravel
 if [ ! -f "${LARAVEL_WWW_PATH}/app" ]; then
