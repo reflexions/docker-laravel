@@ -1,5 +1,7 @@
 ### reflexions/docker-laravel
 
+by [Reflexions](https://reflexions.co)
+
 - Only depends on the Docker Toolbox
 - Edit with Sublime, PhpStorm, Eclipse, etc
 - Installs everything necessary to get started - laravel, php, database
