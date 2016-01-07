@@ -35,14 +35,14 @@ postgres:
 GITHUB_TOKEN=Your_Github_Token
 APP_KEY=SomeRandomString
 
-DB_DATABASE application
-DB_USERNAME laravel
-DB_PASSWORD password
+DB_DATABASE=application
+DB_USERNAME=laravel
+DB_PASSWORD=password
 
 # Match DB_USERNAME, DB_PASSWORD, and DB_DATABASE above
-POSTGRES_DB application
-POSTGRES_USER laravel
-POSTGRES_PASSWORD password
+POSTGRES_DB=application
+POSTGRES_USER=laravel
+POSTGRES_PASSWORD=password
 ```
 
 4.) Start containers

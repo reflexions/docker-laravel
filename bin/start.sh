@@ -15,4 +15,4 @@ touch /etc/cron.d/php5 /var/spool/cron/crontabs/www-data /etc/crontab
 cd ${LARAVEL_WWW_PATH}
 
 # start processes
-exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+exec /usr/local/bin/supervisord -c /etc/supervisor/supervisord.conf

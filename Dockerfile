@@ -20,8 +20,13 @@ RUN apt-get update && \
         curl 								\
         locales 							\
 	    git-core                            \
-        supervisor                          \
 	    wget
+
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+		python \
+		python-pip
+RUN pip install supervisor==3.2.0
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -68,6 +73,7 @@ ENV LARAVEL_WWW_PATH /var/www/laravel
 ENV LARAVEL_RUN_PATH /var/run/laravel
 ENV LARAVEL_STORAGE_PATH /var/run/laravel/storage
 ENV LARAVEL_BOOTSTRAP_CACHE_PATH /var/run/laravel/bootstrap/cache
+ENV GITHUB_TOKEN Your_Github_Token
 
 ENV APP_ENV local
 ENV APP_DEBUG true

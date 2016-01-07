@@ -3,6 +3,10 @@ echo "START setup.sh"
 echo "-----------------------"
 cd /usr/share/docker-laravel
 
+if [ "$GITHUB_TOKEN" == "Your_Github_Token" ]; then
+	>&2 echo "Error: GITHUB_TOKEN not set."
+	exit 1
+fi
 
 # application run dirs
 mkdir ${LARAVEL_RUN_PATH}
@@ -41,11 +45,13 @@ chown www-data.crontab /var/spool/cron/crontabs/www-data
 chmod 0600 /var/spool/cron/crontabs/www-data
 
 # supervisor
+mkdir /etc/supervisor
+mkdir /etc/supervisor/conf.d
 cp etc/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
 cp etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 
 # maybe install laravel
-if [ ! -f ${LARAVEL_WWW_PATH}/app ]; then
+if [ ! -f "${LARAVEL_WWW_PATH}/app" ]; then
 	cd ${LARAVEL_WWW_PATH}
     composer create-project --prefer-dist laravel/laravel /tmp/laravel
     rm /tmp/laravel/.env
@@ -58,13 +64,13 @@ fi
 
 # maybe install reflexions/docker-laravel
 #   - maybe it's just .gitignore'd
-if [ ! -f ${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel ]; then
+if [ ! -f "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
 	cd ${LARAVEL_WWW_PATH}
 	composer install
 	cd /usr/share/docker-laravel
 fi
 #   - or maybe it needs to be installed
-if [ ! -f ${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel ]; then
+if [ ! -f "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
 	cd ${LARAVEL_WWW_PATH}
 	composer require reflexions/docker-laravel
 	sed -i 's/Illuminate\\Foundation\\Application/Reflexions\\DockerLaravel\\DockerApplication/g' ${LARAVEL_WWW_PATH}/bootstrap/app.php
