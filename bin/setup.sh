@@ -3,11 +3,6 @@ echo "START setup.sh"
 echo "-----------------------"
 cd /usr/share/docker-laravel
 
-if [ "$GITHUB_TOKEN" == "Your_Github_Token" ]; then
-	>&2 echo "Error: GITHUB_TOKEN not set."
-	exit 1
-fi
-
 # application run dirs
 mkdir ${LARAVEL_RUN_PATH}
 chown -R www-data ${LARAVEL_RUN_PATH}
@@ -29,9 +24,11 @@ chown -R www-data ${LARAVEL_BOOTSTRAP_CACHE_PATH}
 chmod -R 775 ${LARAVEL_BOOTSTRAP_CACHE_PATH}
 
 # configure composer
-composer config --global github-oauth.github.com $GITHUB_TOKEN
-composer config --global repo.packagist composer https://packagist.org
-composer install
+if [ "$GITHUB_TOKEN" != "Your_Github_Token" ]; then
+	composer config --global github-oauth.github.com $GITHUB_TOKEN
+	composer config --global repo.packagist composer https://packagist.org
+	composer install
+fi
 
 # configure apache
 cp etc/apache2/sites-available/001-application.conf /etc/apache2/sites-available/001-application.conf
@@ -40,6 +37,11 @@ unlink /etc/apache2/sites-enabled/000-default.conf
 
 # maybe install laravel
 if [ ! -d "${LARAVEL_WWW_PATH}/app" ]; then
+	if [ "$GITHUB_TOKEN" == "Your_Github_Token" ]; then
+		>&2 echo "Error: GITHUB_TOKEN not set."
+		exit 1
+	fi
+
 	cd ${LARAVEL_WWW_PATH}
     composer create-project --prefer-dist laravel/laravel /tmp/laravel
     rm /tmp/laravel/.env
@@ -51,14 +53,24 @@ if [ ! -d "${LARAVEL_WWW_PATH}/app" ]; then
 fi
 
 # maybe install reflexions/docker-laravel
-#   - maybe it's just .gitignore'd
+#   - maybe it needs to be installed
 if [ ! -d "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
+	if [ "$GITHUB_TOKEN" == "Your_Github_Token" ]; then
+		>&2 echo "Error: GITHUB_TOKEN not set."
+		exit 1
+	fi
+
 	cd ${LARAVEL_WWW_PATH}
 	composer install
 	cd /usr/share/docker-laravel
 fi
-#   - or maybe it needs to be installed
+#   - or maybe it needs to be required
 if [ ! -d "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
+	if [ "$GITHUB_TOKEN" == "Your_Github_Token" ]; then
+		>&2 echo "Error: GITHUB_TOKEN not set."
+		exit 1
+	fi
+
 	cd ${LARAVEL_WWW_PATH}
 	composer require reflexions/docker-laravel
 	sed -i 's/Illuminate\\Foundation\\Application/Reflexions\\DockerLaravel\\DockerApplication/g' ${LARAVEL_WWW_PATH}/bootstrap/app.php
