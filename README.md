@@ -1,15 +1,24 @@
-# reflexions/docker-laravel
+### reflexions/docker-laravel
 
-- Provides laravel docker image.
-- Installs fresh laravel 5.2 if added to empty directory.
-- Installs `reflexions/docker-laravel` php package if added to existing laravel app.
-- Installs `Reflexions\DockerLaravel\DockerApplication` into _bootstrap/app.php_ to prevent permissions errors.
+- Only depends on the Docker Toolbox
+- Edit with Sublime, PhpStorm, Eclipse, etc
+- Installs everything necessary to get started - laravel, php, database
+  - Can start with empty directory or existing laravel project
+  - No need to install PHP via homebrew / MacPorts / .MSI / apt-get / yum / etc
+- Addresses permissions errors without requiring `chmod 777`
 
-## Instructions
+#### Overview
+
+- Runs setup script first time
+- Downloads fresh laravel 5.2 if the _app_ directory is missing
+- Adds dependency on `reflexions/docker-laravel` composer package
+- Updates _bootstrap/app.php_ to use `Reflexions\DockerLaravel\DockerApplication` to prevent permissions errors
+
+#### Instructions
 
 1.) Install [Docker Toolbox](https://www.docker.com/docker-toolbox) to get docker, docker-compose, and the Kitematic GUI
 
-2.) In the project directory create _docker-compose.yml_
+2.) Create a _docker-compose.yml_ in the project directory.  Define the laravel service and any desired database services:
 
 ```yaml
 laravel:
@@ -18,48 +27,54 @@ laravel:
     - 80:80
   env_file: .env
   links:
-    - postgres
+    - database
   volumes:
     - .:/var/www/laravel
 
-postgres:
+database:
   image: postgres:9.4.4
   env_file: .env
   environment:
     LC_ALL: C.UTF-8
 ```
 
-3.) Obtain a [Github Personal Access Token](https://github.com/settings/tokens/new).  In the project directory create a laravel _.env_ file with the GITHUB_TOKEN
+3.) Obtain a [Github Personal Access Token](https://github.com/settings/tokens/new).  Create an  _.env_ file in the project directory.  Configure laravel and other services as desired.  The `database` service above corresponds to `DB_HOST=database` below:
 
 ```bash
+# laravel service
 GITHUB_TOKEN=Your_Github_Token
 APP_KEY=SomeRandomString
-
+DB_CONNECTION=postgres
+DB_HOST=database
 DB_DATABASE=application
-DB_USERNAME=laravel
+DB_USERNAME=username
 DB_PASSWORD=password
 
-# Match DB_USERNAME, DB_PASSWORD, and DB_DATABASE above
+# database service
 POSTGRES_DB=application
-POSTGRES_USER=laravel
+POSTGRES_USER=username
 POSTGRES_PASSWORD=password
 ```
 
-4.) Start containers
+4.) With one command download the images, create the service containers, and start the application:
 
 ```bash
 docker-compose up
 ```
 
-## Optional
-
-### Shell into image
+5.) (Optional) Single line to open bash shell suitable for running `composer` or `php artisan`:
 
 ```bash
 docker exec -it $(docker ps | grep reflexions/docker-laravel | awk '{print $1}') bash
 ```
 
-### Add _Dockerfile_ in the root of your Laravel app to deploy as an Elastic Beanstalk docker application.
+#### Front-end build systems
+
+Front-end build systems (gulp, grunt, bower, etc) are best installed outside of docker.  The resulting assets will be readily accessible via the volume mapping defined on the laravel service.
+
+#### Elastic Beanstalk
+
+Add a _Dockerfile_ to the root of the project to deploy with Elastic Beanstalk:
 
 ```
 FROM reflexions/docker-laravel:latest
