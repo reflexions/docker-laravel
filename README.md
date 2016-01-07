@@ -97,8 +97,8 @@ _**Solution:**_ Known issue with the Docker Toolbox on older CPUs.  Install dock
 **Problem:** Can't connect to database
 
 _**Solution:**_
-1.) Check that the DB_CONNECTION corresponds to the correct laravel db driver
-2.) Check that the DB_HOST corresponds to the name of the service listed in docker-compose.yml (i.e. "database" in the example above)
+  - Check that the DB_CONNECTION corresponds to the correct laravel db driver
+  - Check that the DB_HOST corresponds to the name of the service listed in docker-compose.yml (i.e. "database" in the example above)
 
 #### Overview
 
