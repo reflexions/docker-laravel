@@ -10,6 +10,7 @@
 #### Overview
 
 - Runs setup script first time
+- Uses github token to avoid composer rate limit errors
 - Downloads fresh laravel 5.2 if the _app_ directory is missing
 - Adds dependency on `reflexions/docker-laravel` composer package
 - Updates _bootstrap/app.php_ to use `Reflexions\DockerLaravel\DockerApplication` to prevent permissions errors
