@@ -13,6 +13,11 @@ class DockerApplication extends \Illuminate\Foundation\Application
     	return $this->storagePath ?: env('LARAVEL_STORAGE_PATH', $this->basePath.DIRECTORY_SEPARATOR.'storage');
     }
 
+    public function bootstrapCachePath()
+    {
+    	return env('LARAVEL_BOOTSTRAP_CACHE_PATH', $this->basePath().'/bootstrap/cache');
+    }
+
     /**
      * Get the path to the configuration cache file.
      *
@@ -20,7 +25,7 @@ class DockerApplication extends \Illuminate\Foundation\Application
      */
     public function getCachedConfigPath()
     {
-        return env('LARAVEL_BOOTSTRAP_CACHE_PATH'.'/config.php', $this->basePath().'/bootstrap/cache/config.php');
+    	return $this->bootstrapCachePath().'/config.php';
     }
 
     /**
@@ -30,7 +35,7 @@ class DockerApplication extends \Illuminate\Foundation\Application
      */
     public function getCachedRoutesPath()
     {
-        return env('LARAVEL_BOOTSTRAP_CACHE_PATH'.'/routes.php', $this->basePath().'/bootstrap/cache/routes.php');
+    	return $this->bootstrapCachePath().'/routes.php';
     }
 
     /**
@@ -40,7 +45,7 @@ class DockerApplication extends \Illuminate\Foundation\Application
      */
     public function getCachedCompilePath()
     {
-        return env('LARAVEL_BOOTSTRAP_CACHE_PATH'.'/compiled.php', $this->basePath().'/bootstrap/cache/compiled.php');
+    	return $this->bootstrapCachePath().'/compiled.php';
     }
 
     /**
@@ -50,6 +55,6 @@ class DockerApplication extends \Illuminate\Foundation\Application
      */
     public function getCachedServicesPath()
     {
-        return env('LARAVEL_BOOTSTRAP_CACHE_PATH'.'/services.php', $this->basePath().'/bootstrap/cache/services.php');
+    	return $this->bootstrapCachePath().'/services.php';
     }
 }

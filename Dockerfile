@@ -15,18 +15,10 @@ RUN echo deb http://www.deb-multimedia.org jessie main non-free >> /etc/apt/sour
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
 		apache2 							\
-        beanstalkd                          \
-		cron                                \
         curl 								\
         locales 							\
 	    git-core                            \
 	    wget
-
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-		python \
-		python-pip
-RUN pip install supervisor==3.2.0
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -68,7 +60,15 @@ RUN curl -sS https://getcomposer.org/installer | php && \
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/cli/php.ini
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/apache2/php.ini
 
-# Configuration
+# start and setup scripts
+# setup script runs on container startup to utilize GITHUB_TOKEN env variable
+COPY . /usr/share/docker-laravel
+RUN chmod 755 /usr/share/docker-laravel/bin/setup.sh && \
+    chmod 755 /usr/share/docker-laravel/bin/start.sh
+ENTRYPOINT ["/usr/share/docker-laravel/bin/start.sh"]
+
+# Default ENV
+# ------------------
 ENV LARAVEL_WWW_PATH /var/www/laravel
 ENV LARAVEL_RUN_PATH /var/run/laravel
 ENV LARAVEL_STORAGE_PATH /var/run/laravel/storage
@@ -99,15 +99,6 @@ ENV MAIL_HOST mailtrap.io
 ENV MAIL_PORT 2525
 ENV MAIL_USERNAME null
 ENV MAIL_PASSWORD null
-
-# start and setup scripts
-# setup script runs on container startup to utilize GITHUB_TOKEN env variable
-COPY . /usr/share/docker-laravel
-WORKDIR /usr/share/docker-laravel
-RUN chmod 755 /usr/share/docker-laravel/bin/setup.sh && \
-    chmod 755 /usr/share/docker-laravel/bin/start.sh
-ENTRYPOINT ["/usr/share/docker-laravel/bin/start.sh"]
-
 
 WORKDIR /var/www/laravel
 EXPOSE 80

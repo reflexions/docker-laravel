@@ -9,10 +9,7 @@ chown -R www-data.www-data ${LARAVEL_RUN_PATH}
 find ${LARAVEL_RUN_PATH} -type d | xargs chmod 775
 find ${LARAVEL_RUN_PATH} -type f | xargs chmod 664
 
-# Set # of hard links to 1 to keep cron happy.
-touch /etc/cron.d/php5 /var/spool/cron/crontabs/www-data /etc/crontab
-
 cd ${LARAVEL_WWW_PATH}
 
 # start processes
-exec /usr/local/bin/supervisord -c /etc/supervisor/supervisord.conf
+exec /bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"
