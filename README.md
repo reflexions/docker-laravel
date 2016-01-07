@@ -1,11 +1,11 @@
-# reflexions/docker-laravel
+### reflexions/docker-laravel
 
 - Provides laravel docker image.
 - Installs fresh laravel 5.2 if added to empty directory.
 - Installs `reflexions/docker-laravel` php package if added to existing laravel app.
 - Installs `Reflexions\DockerLaravel\DockerApplication` into _bootstrap/app.php_ to prevent permissions errors.
 
-## Instructions
+#### Instructions
 
 1.) Install [Docker Toolbox](https://www.docker.com/docker-toolbox) to get docker, docker-compose, and the Kitematic GUI
 
@@ -51,15 +51,15 @@ POSTGRES_PASSWORD=password
 docker-compose up
 ```
 
-## Optional
+#### Optional
 
-### Shell into image
+##### Shell into image
 
 ```bash
 docker exec -it $(docker ps | grep reflexions/docker-laravel | awk '{print $1}') bash
 ```
 
-### Add _Dockerfile_ in the root of your Laravel app to deploy as an Elastic Beanstalk docker application.
+##### Add _Dockerfile_ in the root of your Laravel app to deploy as an Elastic Beanstalk docker application.
 
 ```
 FROM reflexions/docker-laravel:latest
