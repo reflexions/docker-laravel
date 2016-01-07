@@ -63,21 +63,9 @@ RUN curl -sS https://getcomposer.org/installer | php && \
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/cli/php.ini
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/apache2/php.ini
 
-# application run dirs
-RUN mkdir /var/run/laravel && \
-    mkdir /var/run/laravel/storage && \
-    mkdir /var/run/laravel/storage/app && \
-    mkdir /var/run/laravel/storage/framework && \
-    mkdir /var/run/laravel/storage/framework/sessions && \
-    mkdir /var/run/laravel/storage/framework/views && \
-    mkdir /var/run/laravel/storage/framework/cache && \
-    mkdir /var/run/laravel/storage/logs && \
-    mkdir /var/run/laravel/bootstrap && \
-    mkdir /var/run/laravel/bootstrap/cache && \
-    chown -R www-data /var/run/laravel && \
-    chmod -R 775 /var/run/laravel
-
 # Configuration
+ENV LARAVEL_WWW_PATH /var/www/laravel
+ENV LARAVEL_RUN_PATH /var/run/laravel
 ENV LARAVEL_STORAGE_PATH /var/run/laravel/storage
 ENV LARAVEL_BOOTSTRAP_CACHE_PATH /var/run/laravel/bootstrap/cache
 
