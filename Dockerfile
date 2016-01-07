@@ -20,8 +20,13 @@ RUN apt-get update && \
         curl 								\
         locales 							\
 	    git-core                            \
-        supervisor                          \
 	    wget
+
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+		python \
+		python-pip
+RUN pip install supervisor==3.2.0
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -63,24 +68,18 @@ RUN curl -sS https://getcomposer.org/installer | php && \
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/cli/php.ini
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/apache2/php.ini
 
-# application run dirs
-RUN mkdir /var/run/laravel && \
-    mkdir /var/run/laravel/app && \
-    mkdir /var/run/laravel/framework && \
-    mkdir /var/run/laravel/framework/sessions && \
-    mkdir /var/run/laravel/framework/views && \
-    mkdir /var/run/laravel/framework/cache && \
-    mkdir /var/run/laravel/logs && \
-    chown -R www-data /var/run/laravel && \
-    chmod -R 775 /var/run/laravel
-
 # Configuration
-ENV APP_STORAGE /var/run/laravel
+ENV LARAVEL_WWW_PATH /var/www/laravel
+ENV LARAVEL_RUN_PATH /var/run/laravel
+ENV LARAVEL_STORAGE_PATH /var/run/laravel/storage
+ENV LARAVEL_BOOTSTRAP_CACHE_PATH /var/run/laravel/bootstrap/cache
+ENV GITHUB_TOKEN Your_Github_Token
 
 ENV APP_ENV local
 ENV APP_DEBUG true
 ENV APP_KEY SomeRandomString
 
+ENV DB_CONNECTION postgres
 ENV DB_HOST postgres
 ENV DB_DATABASE application
 ENV DB_USERNAME laravel

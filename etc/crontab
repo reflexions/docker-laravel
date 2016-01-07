@@ -25,4 +25,4 @@
 # m h  dom mon dow   command
 
 # laravel 5
-*/1 * * * * /usr/bin/php /var/www/laravel/artisan schedule:run > /dev/null
+*/1 * * * * /usr/bin/php ${LARAVEL_WWW_PATH}/artisan schedule:run > /dev/null
