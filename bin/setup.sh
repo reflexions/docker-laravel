@@ -39,7 +39,7 @@ ln -s /etc/apache2/sites-available/001-application.conf /etc/apache2/sites-enabl
 unlink /etc/apache2/sites-enabled/000-default.conf
 
 # maybe install laravel
-if [ ! -f "${LARAVEL_WWW_PATH}/app" ]; then
+if [ ! -d "${LARAVEL_WWW_PATH}/app" ]; then
 	cd ${LARAVEL_WWW_PATH}
     composer create-project --prefer-dist laravel/laravel /tmp/laravel
     rm /tmp/laravel/.env
@@ -52,13 +52,13 @@ fi
 
 # maybe install reflexions/docker-laravel
 #   - maybe it's just .gitignore'd
-if [ ! -f "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
+if [ ! -d "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
 	cd ${LARAVEL_WWW_PATH}
 	composer install
 	cd /usr/share/docker-laravel
 fi
 #   - or maybe it needs to be installed
-if [ ! -f "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
+if [ ! -d "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
 	cd ${LARAVEL_WWW_PATH}
 	composer require reflexions/docker-laravel
 	sed -i 's/Illuminate\\Foundation\\Application/Reflexions\\DockerLaravel\\DockerApplication/g' ${LARAVEL_WWW_PATH}/bootstrap/app.php
