@@ -73,6 +73,7 @@ ENV APP_ENV local
 ENV APP_DEBUG true
 ENV APP_KEY SomeRandomString
 
+ENV DB_CONNECTION postgres
 ENV DB_HOST postgres
 ENV DB_DATABASE application
 ENV DB_USERNAME laravel
