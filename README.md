@@ -7,17 +7,9 @@
   - No need to install PHP via homebrew / MacPorts / .MSI / apt-get / yum / etc
 - Addresses permissions errors without requiring `chmod 777`
 
-#### Overview
-
-- Runs setup script first time
-- Uses github token to avoid composer rate limit errors
-- Downloads fresh laravel 5.2 if the _app_ directory is missing
-- Adds dependency on `reflexions/docker-laravel` composer package
-- Updates _bootstrap/app.php_ to use `Reflexions\DockerLaravel\DockerApplication` to prevent permissions errors
-
 #### Instructions
 
-1.) Install [Docker Toolbox](https://www.docker.com/docker-toolbox) to get docker, docker-compose, and the Kitematic GUI
+1.) Install [Docker Toolbox](https://www.docker.com/docker-toolbox) to get docker, docker-compose, and the Kitematic GUI.  Open a terminal with the docker env variables via `Kitematic -> File -> Open Docker Command Line Terminal`
 
 2.) Create a _docker-compose.yml_ in the project directory.  Define the laravel service and any desired database services:
 
@@ -45,7 +37,7 @@ database:
 # laravel service
 GITHUB_TOKEN=Your_Github_Token
 APP_KEY=SomeRandomString
-DB_CONNECTION=postgres
+DB_CONNECTION=pgsql
 DB_HOST=database
 DB_DATABASE=application
 DB_USERNAME=username
@@ -69,9 +61,59 @@ docker-compose up
 docker exec -it $(docker ps | grep reflexions/docker-laravel | awk '{print $1}') bash
 ```
 
+#### Troubleshooting
+
+*Problem:* Mac OS X: Couldn't connect to docker daemon
+```bash
+$ docker-compose up
+ERROR: Couldn't connect to Docker daemon - you might need to run `docker-machine start default`.
+$
+```
+**Solution:** Open terminal with `Kitematic -> File -> Open Docker Command Line Terminal`.
+
+*Problem:* Don't like the Docker Command Line Terminal
+**Solution:** Open terminal with `Kitematic -> File -> Open Docker Command Line Terminal`.  Scroll up to view the initialization code for your particular installation:
+```bash
+$ bash -c "export PATH='/Users/patsplat/Applications/Kitematic (Beta).app/Contents/Resources/resources:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin' && clear && DOCKER_HOST=tcp://192.168.99.100:2376 DOCKER_CERT_PATH=/Users/patsplat/.docker/machine/machines/dev DOCKER_TLS_VERIFY=1 /bin/bash"
+```
+Copy these variables into _~/.bash_profile_:
+```bash
+export PATH='/Users/patsplat/Applications/Kitematic (Beta).app/Contents/Resources/resources:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
+export DOCKER_HOST=tcp://192.168.99.100:2376
+export DOCKER_CERT_PATH=/Users/patsplat/.docker/machine/machines/dev
+export DOCKER_TLS_VERIFY=1
+```
+
+*Problem:* Changes to _.env_ file apparently ignored by laravel
+**Solution:** Restart cluster
+
+*Problem:* Mac OS X: Illegal Instruction 4
+```bash
+$ docker-compose up
+Illegal instruction: 4
+$
+```
+**Solution:** Known issue with the Docker Toolbox on older CPUs.  Install docker-compose using pip
+
+*Problem:* Can't connect to database
+**Solution:**
+1.) Check that the DB_CONNECTION corresponds to the correct laravel db driver
+2.) Check that the DB_HOST corresponds to the name of the service listed in docker-compose.yml (i.e. "database" in the example above)
+
+#### Overview
+
+- Runs setup script first time
+- Uses github token to avoid composer rate limit errors
+- Downloads fresh laravel 5.2 if the _app_ directory is missing
+- Adds dependency on `reflexions/docker-laravel` composer package
+- Updates _bootstrap/app.php_ to use `Reflexions\DockerLaravel\DockerApplication` to prevent permissions errors
+
+
 #### Front-end build systems
 
 Front-end build systems (gulp, grunt, bower, etc) are best installed outside of docker.  The resulting assets will be readily accessible via the volume mapping defined on the laravel service.
+
+
 
 #### Elastic Beanstalk
 
