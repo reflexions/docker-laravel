@@ -33,30 +33,16 @@ postgres:
 
 ```bash
 GITHUB_TOKEN=Your_Github_Token
-APP_ENV=local
-APP_DEBUG=true
 APP_KEY=SomeRandomString
 
-DB_CONNECTION=postgres
-DB_HOST=postgres
-DB_DATABASE=application
-DB_USERNAME=laravel
-DB_PASSWORD=password
+ENV DB_DATABASE application
+ENV DB_USERNAME laravel
+ENV DB_PASSWORD password
 
 # Match DB_USERNAME, DB_PASSWORD, and DB_DATABASE above
-POSTGRES_DB=application
-POSTGRES_USER=laravel
-POSTGRES_PASSWORD=password
-
-CACHE_DRIVER=file
-SESSION_DRIVER=file
-QUEUE_DRIVER=sync
-
-MAIL_DRIVER=smtp
-MAIL_HOST=mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
+ENV POSTGRES_DB application
+ENV POSTGRES_USER laravel
+ENV POSTGRES_PASSWORD password
 ```
 
 4.) Start containers
