@@ -72,16 +72,9 @@ $
 **Solution:** Open terminal with `Kitematic -> File -> Open Docker Command Line Terminal`.
 
 *Problem:* Don't like the Docker Command Line Terminal
-**Solution:** Open terminal with `Kitematic -> File -> Open Docker Command Line Terminal`.  Scroll up to view the initialization code for your particular installation:
+**Solution:** Run `Kitematic -> Install Docker Commands`.  Then add the following line _~/.bash_profile_:
 ```bash
-$ bash -c "export PATH='/Users/patsplat/Applications/Kitematic (Beta).app/Contents/Resources/resources:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin' && clear && DOCKER_HOST=tcp://192.168.99.100:2376 DOCKER_CERT_PATH=/Users/patsplat/.docker/machine/machines/dev DOCKER_TLS_VERIFY=1 /bin/bash"
-```
-Copy these variables into _~/.bash_profile_:
-```bash
-export PATH='/Users/patsplat/Applications/Kitematic (Beta).app/Contents/Resources/resources:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
-export DOCKER_HOST=tcp://192.168.99.100:2376
-export DOCKER_CERT_PATH=/Users/patsplat/.docker/machine/machines/dev
-export DOCKER_TLS_VERIFY=1
+eval "$(docker-machine env dev)"
 ```
 
 *Problem:* Changes to _.env_ file apparently ignored by laravel
