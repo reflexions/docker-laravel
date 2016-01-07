@@ -79,7 +79,7 @@ ENV APP_ENV local
 ENV APP_DEBUG true
 ENV APP_KEY SomeRandomString
 
-ENV DB_CONNECTION postgres
+ENV DB_CONNECTION pgsql
 ENV DB_HOST database
 ENV DB_DATABASE application
 ENV DB_USERNAME username
