@@ -93,6 +93,8 @@ EXPOSE 80
 ENTRYPOINT ["/usr/share/docker-laravel/bin/start.sh"]
 ```
 
+This will define an application container.  Use RDS to create the database.  Add all variables from the _.env_ file (including the APP_KEY, DB_HOST, etc) into the environment config under Configuration -> Software Configuration.
+
 #### Troubleshooting
 
 **Problem:** Mac OS X: Couldn't connect to docker daemon
