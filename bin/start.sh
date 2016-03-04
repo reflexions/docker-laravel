@@ -11,5 +11,8 @@ find ${LARAVEL_RUN_PATH} -type f | xargs chmod 664
 
 cd ${LARAVEL_WWW_PATH}
 
+# clear leftover pid files from interrupted containers
+rm -f /var/run/apache2/apache2.pid
+
 # start processes
 exec /bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"
