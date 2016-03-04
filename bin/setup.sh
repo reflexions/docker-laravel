@@ -52,6 +52,17 @@ if [ ! -d "${LARAVEL_WWW_PATH}/app" ]; then
 	cd /usr/share/docker-laravel
 fi
 
+# maybe composer install
+if [ ! -d "${LARAVEL_WWW_PATH}/vendor" ]; then
+	if [ "$GITHUB_TOKEN" == "Your_Github_Token" ]; then
+		>&2 echo "Error: GITHUB_TOKEN not set."
+		exit 1
+	fi
+
+	cd ${LARAVEL_WWW_PATH}
+	composer install
+fi
+
 # maybe install reflexions/docker-laravel
 #   - maybe it needs to be installed
 if [ ! -d "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
