@@ -143,5 +143,82 @@ _**Solution:**_
   - Check that the DB_HOST corresponds to the name of the service listed in docker-compose.yml (i.e. "database" in the example above)
 
 **Problem:** RuntimeException: No supported encrypter found. The cipher and / or key length are invalid.
+
 _**Solution:**_
+
   - Run `php artisan key:generate` to update APP_KEY on .env, then restart the container.
+
+**Problem:** Want to use mysql instead of postgres
+
+_**Solution:**_
+  - Modify `docker-config.yml` to reference MySQL:
+```yaml
+laravel:
+  image: reflexions/docker-laravel:latest
+  ports:
+    - 80:80
+  env_file: .env
+  links:
+    - database
+  volumes:
+    - .:/var/www/laravel
+
+database:
+  image: mysql:5.6
+  env_file: .env
+  environment:
+    LC_ALL: C.UTF-8
+```
+  - Modify `.env` to reference MySQL:
+```bash
+# laravel service
+GITHUB_TOKEN=Your_Github_Token
+APP_KEY=SomeRandomString
+DB_CONNECTION=mysql
+DB_HOST=database
+DB_DATABASE=application
+DB_USERNAME=username
+DB_PASSWORD=password
+
+# database service
+MYSQL_DATABASE=application
+MYSQL_USER=username
+MYSQL_PASSWORD=password
+```
+
+**Problem:** Want to use mysql already running on local machine (not docker)
+
+_**Solution:**_
+  - Modify `docker-config.yml` to drop the unnecessary database service:
+```yaml
+laravel:
+  image: reflexions/docker-laravel:latest
+  ports:
+    - 80:80
+  env_file: .env
+  links:
+    - database
+  volumes:
+    - .:/var/www/laravel
+```
+  - Modify `.env` to connect to MySQL via the docker-machine host ip address (192.168.99.1):
+```bash
+# laravel service
+GITHUB_TOKEN=Your_Github_Token
+APP_KEY=SomeRandomString
+DB_CONNECTION=pgsql
+DB_HOST=192.168.99.1
+DB_DATABASE=application
+DB_USERNAME=username
+DB_PASSWORD=password
+```
+  - Ensure that "bind_address" config parameter is set to 0.0.0.0 on startup.  This can be set by your `my.cnf`, or it can be hard coded in your startup script.  To check the value use this sql:
+```sql
+show variables like 'bind_address';
+```
+  - Ensure that the database username has permission to connect from the docker container (usually 192.168.99.100)
+```sql
+CREATE USER 'username'@'192.168.99.100' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON application.* TO 'username'@'192.168.99.100';
+FLUSH PRIVILEGES;
+```
