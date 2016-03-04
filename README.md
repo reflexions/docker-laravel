@@ -28,6 +28,8 @@ laravel:
 
 database:
   image: postgres:9.4.4
+  ports:
+    - 5432:5432
   env_file: .env
   environment:
     LC_ALL: C.UTF-8
@@ -165,6 +167,8 @@ laravel:
 
 database:
   image: mysql:5.6
+  ports:
+    - 3306:3306
   env_file: .env
   environment:
     LC_ALL: C.UTF-8
@@ -196,8 +200,6 @@ laravel:
   ports:
     - 80:80
   env_file: .env
-  links:
-    - database
   volumes:
     - .:/var/www/laravel
 ```
@@ -206,7 +208,7 @@ laravel:
 # laravel service
 GITHUB_TOKEN=Your_Github_Token
 APP_KEY=SomeRandomString
-DB_CONNECTION=pgsql
+DB_CONNECTION=mysql
 DB_HOST=192.168.99.1
 DB_DATABASE=application
 DB_USERNAME=username
