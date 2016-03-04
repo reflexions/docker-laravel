@@ -185,6 +185,7 @@ DB_USERNAME=username
 DB_PASSWORD=password
 
 # database service
+MYSQL_ROOT_PASSWORD=password
 MYSQL_DATABASE=application
 MYSQL_USER=username
 MYSQL_PASSWORD=password
