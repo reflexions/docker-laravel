@@ -28,6 +28,8 @@ laravel:
 
 database:
   image: postgres:9.4.4
+  ports:
+    - 5432:5432
   env_file: .env
   environment:
     LC_ALL: C.UTF-8
@@ -165,6 +167,8 @@ laravel:
 
 database:
   image: mysql:5.6
+  ports:
+    - 3306:3306
   env_file: .env
   environment:
     LC_ALL: C.UTF-8
