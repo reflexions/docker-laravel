@@ -105,7 +105,7 @@ This will define an application container.  Use RDS to create the database.  Add
 
 #### Troubleshooting
 
-**Problem:** Mac OS X: Couldn't connect to docker daemon
+##### **Problem:** Mac OS X: Couldn't connect to docker daemon
 ```bash
 $ docker-compose up
 ERROR: Couldn't connect to Docker daemon - you might need to run `docker-machine start default`.
@@ -113,21 +113,21 @@ $
 ```
 _**Solution:**_ Open terminal with `Kitematic -> File -> Open Docker Command Line Terminal`.
 
-**Problem:** Don't like the Docker Command Line Terminal
+##### **Problem:** Don't like the Docker Command Line Terminal
 
 _**Solution:**_ Run `Kitematic -> Install Docker Commands`.  Then add the following line _~/.bash_profile_:
 ```bash
 eval "$(docker-machine env dev)"
 ```
 
-**Problem:** Changes to _.env_ file apparently ignored by laravel
+##### **Problem:** Changes to _.env_ file apparently ignored by laravel
 
 _**Solution:**_ Restart cluster.  Settings in the _.env_ file are only read on start.
 ```bash
 $ docker-compose restart
 ```
 
-**Problem:** Mac OS X: Illegal Instruction 4
+##### **Problem:** Mac OS X: Illegal Instruction 4
 ```bash
 $ docker-compose up
 Illegal instruction: 4
@@ -136,19 +136,19 @@ $
 
 _**Solution:**_ Known issue with the Docker Toolbox on older CPUs.  Install docker-compose using pip
 
-**Problem:** Can't connect to database
+##### **Problem:** Can't connect to database
 
 _**Solution:**_
   - Check that the DB_CONNECTION corresponds to the correct laravel db driver
   - Check that the DB_HOST corresponds to the name of the service listed in docker-compose.yml (i.e. "database" in the example above)
 
-**Problem:** RuntimeException: No supported encrypter found. The cipher and / or key length are invalid.
+##### **Problem:** RuntimeException: No supported encrypter found. The cipher and / or key length are invalid.
 
 _**Solution:**_
 
   - Run `php artisan key:generate` to update APP_KEY on .env, then restart the container.
 
-**Problem:** Want to use mysql instead of postgres
+##### **Problem:** Want to use mysql instead of postgres
 
 _**Solution:**_
   - Modify `docker-config.yml` to reference MySQL:
@@ -186,7 +186,7 @@ MYSQL_USER=username
 MYSQL_PASSWORD=password
 ```
 
-**Problem:** Want to use mysql already running on local machine (not docker)
+##### **Problem:** Want to use mysql already running on local machine (not docker)
 
 _**Solution:**_
   - Modify `docker-config.yml` to drop the unnecessary database service:
