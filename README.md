@@ -1,5 +1,7 @@
 ### reflexions/docker-laravel
 
+by [Reflexions](https://reflexions.co)
+
 - Only depends on the Docker Toolbox
 - Edit with Sublime, PhpStorm, Eclipse, etc
 - Installs everything necessary to get started - laravel, php, database
@@ -55,10 +57,18 @@ POSTGRES_PASSWORD=password
 docker-compose up
 ```
 
-5.) (Optional) Single line to open bash shell suitable for running `composer` or `php artisan`:
+5.) (optional) APP_KEY
 
 ```bash
-docker exec -it $(docker ps | grep reflexions/docker-laravel | awk '{print $1}') bash
+$ docker exec -it $(docker ps | grep reflexions/docker-laravel | awk '{print $1}') bash
+root@4c0491540409:/var/www/laravel# php artisan key:generate
+```
+
+6.) (optional) Tinker
+
+```bash
+$ docker exec -it $(docker ps | grep reflexions/docker-laravel | awk '{print $1}') bash
+root@4c0491540409:/var/www/laravel# php artisan tinker
 ```
 
 #### Overview
@@ -90,6 +100,8 @@ WORKDIR /var/www/laravel
 EXPOSE 80
 ENTRYPOINT ["/usr/share/docker-laravel/bin/start.sh"]
 ```
+
+This will define an application container.  Use RDS to create the database.  Add all variables from the _.env_ file (including the APP_KEY, DB_HOST, etc) into the `AWS Management Console`  -> `Elastic Beanstalk` -> `Your-Environment` -> `Configuration` -> `Software Configuration`.
 
 #### Troubleshooting
 
@@ -129,3 +141,7 @@ _**Solution:**_ Known issue with the Docker Toolbox on older CPUs.  Install dock
 _**Solution:**_
   - Check that the DB_CONNECTION corresponds to the correct laravel db driver
   - Check that the DB_HOST corresponds to the name of the service listed in docker-compose.yml (i.e. "database" in the example above)
+
+**Problem:** RuntimeException: No supported encrypter found. The cipher and / or key length are invalid.
+_**Solution:**_
+  - Run `php artisan key:generate` to update APP_KEY on .env, then restart the container.
