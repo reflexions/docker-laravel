@@ -6,8 +6,8 @@ fi
 
 # reset permissions of laravel run-time caches
 chown -R www-data.www-data ${LARAVEL_RUN_PATH}
-find ${LARAVEL_RUN_PATH} -type d | xargs chmod 775
-find ${LARAVEL_RUN_PATH} -type f | xargs chmod 664
+find ${LARAVEL_RUN_PATH} -type d -print0 | xargs -0 chmod 775
+find ${LARAVEL_RUN_PATH} -type f -print0 | xargs -0 chmod 664
 
 cd ${LARAVEL_WWW_PATH}
 
