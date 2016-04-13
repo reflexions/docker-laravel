@@ -24,6 +24,10 @@ mkdir ${LARAVEL_BOOTSTRAP_CACHE_PATH}/cache
 chown -R www-data ${LARAVEL_BOOTSTRAP_CACHE_PATH}
 chmod -R 775 ${LARAVEL_BOOTSTRAP_CACHE_PATH}
 
+touch ~/.ssh/known_hosts
+ssh-keyscan -H github.com | sort -u - ~/.ssh/known_hosts > ~/.ssh/tmp_hosts
+mv ~/.ssh/tmp_hosts ~/.ssh/known_hosts
+
 # configure composer
 if [ "$GITHUB_TOKEN" != "Your_Github_Token" ]; then
 	composer config --global github-oauth.github.com $GITHUB_TOKEN
