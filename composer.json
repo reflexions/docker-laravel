@@ -4,8 +4,8 @@
     "license": "proprietary",
     "authors": [
         {
-            "name": "Patrick Way",
-            "email": "patrick@reflexions.co"
+            "name": "Reflexions",
+            "email": "docker-laravel@reflexions.co"
         }
     ],
     "require": {
