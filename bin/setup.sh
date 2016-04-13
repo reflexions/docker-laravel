@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 echo "-----------------------"
 echo "START setup.sh"
 echo "-----------------------"
@@ -37,11 +38,6 @@ unlink /etc/apache2/sites-enabled/000-default.conf
 
 # maybe install laravel
 if [ ! -d "${LARAVEL_WWW_PATH}/app" ]; then
-	if [ "$GITHUB_TOKEN" == "Your_Github_Token" ]; then
-		>&2 echo "Error: GITHUB_TOKEN not set."
-		exit 1
-	fi
-
 	cd ${LARAVEL_WWW_PATH}
     composer create-project --prefer-dist laravel/laravel /tmp/laravel
     rm /tmp/laravel/.env
@@ -54,11 +50,6 @@ fi
 
 # maybe composer install
 if [ ! -d "${LARAVEL_WWW_PATH}/vendor" ]; then
-	if [ "$GITHUB_TOKEN" == "Your_Github_Token" ]; then
-		>&2 echo "Error: GITHUB_TOKEN not set."
-		exit 1
-	fi
-
 	cd ${LARAVEL_WWW_PATH}
 	composer install
 fi
@@ -66,22 +57,12 @@ fi
 # maybe install reflexions/docker-laravel
 #   - maybe it needs to be installed
 if [ ! -d "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
-	if [ "$GITHUB_TOKEN" == "Your_Github_Token" ]; then
-		>&2 echo "Error: GITHUB_TOKEN not set."
-		exit 1
-	fi
-
 	cd ${LARAVEL_WWW_PATH}
 	composer install
 	cd /usr/share/docker-laravel
 fi
 #   - or maybe it needs to be required
 if [ ! -d "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
-	if [ "$GITHUB_TOKEN" == "Your_Github_Token" ]; then
-		>&2 echo "Error: GITHUB_TOKEN not set."
-		exit 1
-	fi
-
 	cd ${LARAVEL_WWW_PATH}
 	composer require reflexions/docker-laravel
 	sed -i 's/Illuminate\\Foundation\\Application/Reflexions\\DockerLaravel\\DockerApplication/g' ${LARAVEL_WWW_PATH}/bootstrap/app.php

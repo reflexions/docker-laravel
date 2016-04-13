@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-MAINTAINER "Patrick Way" <patrick@reflexions.co>
+MAINTAINER "Reflexions" <docker-laravel@reflexions.co>
 
 WORKDIR /tmp
 ENV LANGUAGE en_US.UTF-8
