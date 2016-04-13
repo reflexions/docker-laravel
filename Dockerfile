@@ -63,8 +63,7 @@ RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc
 # start and setup scripts
 # setup script runs on container startup to utilize GITHUB_TOKEN env variable
 COPY . /usr/share/docker-laravel
-RUN chmod 755 /usr/share/docker-laravel/bin/setup.sh && \
-    chmod 755 /usr/share/docker-laravel/bin/start.sh
+RUN chmod 755 /usr/share/docker-laravel/bin/setup.sh /usr/share/docker-laravel/bin/start.sh
 ENTRYPOINT ["/usr/share/docker-laravel/bin/start.sh"]
 
 # Default ENV
