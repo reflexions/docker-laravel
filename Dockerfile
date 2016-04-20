@@ -65,6 +65,10 @@ RUN curl -sS https://getcomposer.org/installer | php && \
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/cli/php.ini
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/apache2/php.ini
 
+# Copy GTE CyberTrust Global Root certificate
+COPY .certs/gte_cybertrust_global_root.crt /etc/ssl/certs/gte_cybertrust_global_root.crt
+RUN c_rehash /etc/ssl/certs
+
 # start and setup scripts
 # setup script runs on container startup to utilize GITHUB_TOKEN env variable
 COPY . /usr/share/docker-laravel
