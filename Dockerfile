@@ -8,7 +8,8 @@ ENV LANGUAGE en_US.UTF-8
 # ffmpeg not in debian:jessie
 RUN echo deb http://www.deb-multimedia.org jessie main non-free >> /etc/apt/sources.list && \
     apt-get update && \
-	DEBIAN_FRONTEND=noninteractive apt-get install deb-multimedia-keyring --force-yes --assume-yes
+	DEBIAN_FRONTEND=noninteractive apt-get install deb-multimedia-keyring --force-yes --assume-yes && \
+    apt-get clean
 
 # Install packages
 # Split into steps to minimize impact of mirror errors
@@ -18,15 +19,18 @@ RUN apt-get update && \
         curl 								\
         locales 							\
 	    git-core                            \
-	    wget
+	    wget && \
+	apt-get clean
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-		ffmpeg
+		ffmpeg && \
+    apt-get clean
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-	    imagemagick
+	    imagemagick && \
+    apt-get clean
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -42,7 +46,8 @@ RUN apt-get update && \
 	    php5-mysql							\
 	    php5-pgsql 							\
 	    php5-redis 							\
-	    php5-sqlite
+	    php5-sqlite && \
+    apt-get clean
 
 # Configure apache2
 RUN a2enmod php5 && \

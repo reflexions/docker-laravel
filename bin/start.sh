@@ -14,5 +14,9 @@ cd ${LARAVEL_WWW_PATH}
 # clear leftover pid files from interrupted containers
 rm -f /var/run/apache2/apache2.pid
 
+# ensure that the environment we're running in has had db updates applied
+php artisan migrate
+
 # start processes
-exec /bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"
+source /etc/apache2/envvars
+/usr/sbin/apache2 -DFOREGROUND
