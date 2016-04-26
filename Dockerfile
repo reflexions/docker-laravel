@@ -4,13 +4,6 @@ MAINTAINER "Reflexions" <docker-laravel@reflexions.co>
 
 WORKDIR /tmp
 
-# Configure locales
-ENV LANGUAGE en_US.UTF-8
-RUN echo "America/New_York" > /etc/timezone \
-    && dpkg-reconfigure -f noninteractive tzdata \
-    && locale-gen ${LANGUAGE} \
-    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
-
 # because I use ll all the time
 COPY ./home/.bashrc /root/.bashrc
 
@@ -33,8 +26,14 @@ RUN apt-get update \
         curl \
         locales \
         git-core \
-        wget \
     && apt-get clean
+
+# Configure locales
+ENV LANGUAGE en_US.UTF-8
+RUN echo "America/New_York" > /etc/timezone \
+    && dpkg-reconfigure -f noninteractive tzdata \
+    && locale-gen ${LANGUAGE} \
+    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
