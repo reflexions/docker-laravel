@@ -7,22 +7,17 @@ WORKDIR /tmp
 # because I use ll all the time
 COPY ./home/.bashrc /root/.bashrc
 
-# Copy GTE CyberTrust Global Root certificate
-# Needed for mailchimp because of https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=812708
-COPY ./certs/gte_cybertrust_global_root.crt /etc/ssl/certs/gte_cybertrust_global_root.crt
-RUN c_rehash /etc/ssl/certs
-
 # ffmpeg not in debian:jessie
 RUN echo deb http://www.deb-multimedia.org jessie main non-free >> /etc/apt/sources.list \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install deb-multimedia-keyring --force-yes --assume-yes \
     && apt-get clean
 
-# Install packages
-# Split into steps to minimize impact of mirror errors
+# openssl is a dependency of apache2, but just to be clear, we list it separately
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apache2 \
+        openssl \
         curl \
         locales \
         git-core \
@@ -35,9 +30,14 @@ RUN echo "America/New_York" > /etc/timezone \
     && locale-gen ${LANGUAGE} \
     && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
 
+# Copy GTE CyberTrust Global Root certificate
+# Needed for mailchimp because of https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=812708
+COPY ./certs/gte_cybertrust_global_root.crt /etc/ssl/certs/gte_cybertrust_global_root.crt
+RUN c_rehash /etc/ssl/certs # requires openssl
+
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        ffmpeg
+        ffmpeg \
         imagemagick \
     && apt-get clean
 
@@ -56,10 +56,8 @@ RUN apt-get update \
         php5-pgsql \
         php5-redis \
         php5-sqlite \
-    && apt-get clean
-
-# Configure apache2
-RUN a2enmod php5 \
+    && apt-get clean \
+    && a2enmod php5 \
     && a2enmod rewrite
 
 # Configure php
