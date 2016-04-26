@@ -18,5 +18,6 @@ rm -f /var/run/apache2/apache2.pid
 php artisan migrate
 
 # start processes
+echo "Starting Apache"
 source /etc/apache2/envvars
 /usr/sbin/apache2 -DFOREGROUND

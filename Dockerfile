@@ -5,63 +5,62 @@ MAINTAINER "Reflexions" <docker-laravel@reflexions.co>
 WORKDIR /tmp
 ENV LANGUAGE en_US.UTF-8
 
+# because I use ll all the time
+COPY ./home/.bashrc /root/.bashrc
+
 # ffmpeg not in debian:jessie
 RUN echo deb http://www.deb-multimedia.org jessie main non-free >> /etc/apt/sources.list && \
     apt-get update && \
-	DEBIAN_FRONTEND=noninteractive apt-get install deb-multimedia-keyring --force-yes --assume-yes && \
+    DEBIAN_FRONTEND=noninteractive apt-get install deb-multimedia-keyring --force-yes --assume-yes && \
     apt-get clean
 
 # Install packages
 # Split into steps to minimize impact of mirror errors
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-		apache2 							\
-        curl 								\
-        locales 							\
-	    git-core                            \
-	    wget && \
-	apt-get clean
-
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-		ffmpeg && \
+        apache2 \
+        curl \
+        locales \
+        git-core \
+        wget && \
     apt-get clean
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-	    imagemagick && \
+        ffmpeg && \
+        imagemagick && \
     apt-get clean
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-		libapache2-mod-php5 				\
-	    php-pear 							\
-	    php5 								\
-	    php5-cli 							\
-	    php5-curl							\
-	    php5-dev							\
-	    php5-gd								\
-	    php5-imagick                        \
-	    php5-mcrypt							\
-	    php5-mysql							\
-	    php5-pgsql 							\
-	    php5-redis 							\
-	    php5-sqlite && \
+        libapache2-mod-php5 \
+        php-pear \
+        php5 \
+        php5-cli \
+        php5-curl \
+        php5-dev \
+        php5-gd \
+        php5-imagick \
+        php5-mcrypt \
+        php5-mysql \
+        php5-pgsql \
+        php5-redis \
+        php5-sqlite && \
     apt-get clean
 
 # Configure apache2
 RUN a2enmod php5 && \
-	a2enmod rewrite
+    a2enmod rewrite
 
 # Configure locales
 RUN echo "America/New_York" > /etc/timezone && \
-	dpkg-reconfigure -f noninteractive tzdata && \
-	locale-gen ${LANGUAGE} && \
-	DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+    dpkg-reconfigure -f noninteractive tzdata && \
+    locale-gen ${LANGUAGE} && \
+    DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
 
 # Configure php
 RUN curl -sS https://getcomposer.org/installer | php && \
-	mv composer.phar /usr/local/bin/composer
+    mv composer.phar /usr/local/bin/composer
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/cli/php.ini
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/apache2/php.ini
 
