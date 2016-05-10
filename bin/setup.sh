@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -x #echo on
+
 echo "-----------------------"
 echo "START setup.sh"
 echo "-----------------------"
@@ -24,13 +26,10 @@ mkdir ${LARAVEL_BOOTSTRAP_CACHE_PATH}/cache
 chown -R www-data ${LARAVEL_BOOTSTRAP_CACHE_PATH}
 chmod -R 775 ${LARAVEL_BOOTSTRAP_CACHE_PATH}
 
+# cache the github host key in case we have to connect with ssh
 touch ~/.ssh/known_hosts
 ssh-keyscan -H github.com | sort -u - ~/.ssh/known_hosts > ~/.ssh/tmp_hosts
 mv ~/.ssh/tmp_hosts ~/.ssh/known_hosts
-
-# for some reason, when deploying to beanstalk the ~/.ssh/id_rsa file gets go+w access
-# reset that. It doesn't happen when running docker-compose up locally; only on beanstalk.
-chmod 600 ~/.ssh/id_rsa
 
 # configure composer
 if [ "$GITHUB_TOKEN" != "Your_Github_Token" ]; then

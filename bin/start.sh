@@ -20,4 +20,4 @@ php artisan migrate
 # start processes
 echo "Starting Apache"
 source /etc/apache2/envvars
-/usr/sbin/apache2 -DFOREGROUND
+exec /usr/sbin/apache2 -DFOREGROUND
