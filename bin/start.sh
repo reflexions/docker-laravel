@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x #echo on
 
 if [ ! -f ${LARAVEL_RUN_PATH}/setup-completed ]; then
     /usr/share/docker-laravel/bin/setup.sh
