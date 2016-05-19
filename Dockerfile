@@ -77,28 +77,7 @@ ENTRYPOINT ["/usr/share/docker-laravel/bin/start.sh"]
 ENV LARAVEL_WWW_PATH=/var/www/laravel \
     LARAVEL_RUN_PATH=/var/run/laravel \
     LARAVEL_STORAGE_PATH=/var/run/laravel/storage \
-    LARAVEL_BOOTSTRAP_CACHE_PATH=/var/run/laravel/bootstrap/cache \
-    GITHUB_TOKEN=Your_Github_Token \
-    \
-    APP_ENV=local \
-    APP_DEBUG=true \
-    APP_KEY=SomeRandomString \
-    \
-    DB_CONNECTION=pgsql \
-    DB_HOST=database \
-    DB_DATABASE=application \
-    DB_USERNAME=username \
-    DB_PASSWORD=password \
-    \
-    CACHE_DRIVER=file \
-    SESSION_DRIVER=file \
-    QUEUE_DRIVER=sync \
-    \
-    MAIL_DRIVER=smtp \
-    MAIL_HOST=mailtrap.io \
-    MAIL_PORT=2525 \
-    MAIL_USERNAME=null \
-    MAIL_PASSWORD=null
+    LARAVEL_BOOTSTRAP_CACHE_PATH=/var/run/laravel/bootstrap/cache
 
 WORKDIR /var/www/laravel
 EXPOSE 80
