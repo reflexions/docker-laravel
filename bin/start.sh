@@ -16,7 +16,11 @@ cd ${LARAVEL_WWW_PATH}
 rm -f /var/run/apache2/apache2.pid
 
 # ensure that the environment we're running in has had db updates applied
-php artisan migrate
+if [ "$RUN_MIGRATE_FORCED" == 1 -o "${RUN_MIGRATE_FORCED,,}" == 'true' ] ; then
+    php artisan migrate --force
+elif [ "$RUN_MIGRATE" == 1 -o "${RUN_MIGRATE,,}" == 'true' ] ; then
+    php artisan migrate
+fi
 
 # start processes
 echo "Starting Apache"
