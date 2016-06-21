@@ -52,8 +52,7 @@ RUN apt-get update \
         php5-gd \
         php5-imagick \
         php5-mcrypt \
-        php5-mysql \ 
-        php5-mbstring \
+        php5-mysql \
         php5-pgsql \
         php5-redis \
         php5-sqlite \
