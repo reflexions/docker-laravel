@@ -13,8 +13,8 @@ COPY ./home/.bashrc /root/.bashrc
 # ffmpeg not in debian:jessie
 RUN echo deb http://www.deb-multimedia.org jessie main non-free >> /etc/apt/sources.list \
     && apt-get update \
-    && apt-get upgrade \
     && DEBIAN_FRONTEND=noninteractive apt-get install deb-multimedia-keyring --force-yes --assume-yes \
+    && apt-get -y upgrade \
     && apt-get clean
 
 # openssl is a dependency of apache2, but just to be clear, we list it separately
