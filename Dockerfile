@@ -1,8 +1,11 @@
 FROM debian:jessie
-
+EXPOSE 80
 MAINTAINER "Reflexions" <docker-laravel@reflexions.co>
 
 WORKDIR /tmp
+
+# default is 'dumb'. that cripples less, vim, coloring, etc
+ENV TERM xterm-256color
 
 # because I use ll all the time
 COPY ./home/.bashrc /root/.bashrc
@@ -80,4 +83,3 @@ ENV LARAVEL_WWW_PATH=/var/www/laravel \
     LARAVEL_BOOTSTRAP_CACHE_PATH=/var/run/laravel/bootstrap/cache
 
 WORKDIR /var/www/laravel
-EXPOSE 80
