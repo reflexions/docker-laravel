@@ -2,8 +2,6 @@ FROM debian:jessie
 EXPOSE 80
 MAINTAINER "Reflexions" <docker-laravel@reflexions.co>
 
-WORKDIR /tmp
-
 # default is 'dumb'. that cripples less, vim, coloring, etc
 ENV TERM xterm-256color
 
