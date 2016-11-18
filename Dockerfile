@@ -107,9 +107,6 @@ RUN sed -i 's/session.use_strict_mode = 0/session.use_strict_mode = 1/g' /etc/ph
 # we're not running cron, so we have to gc sessions after requests
 RUN sed -i 's/session.gc_probability = 0/session.gc_probability = 1/g' /etc/php5/apache2/php.ini
 
-# better multibyte char support
-RUN sed -i 's/;mbstring.func_overload = 0/mbstring.func_overload = 7/g' /etc/php5/apache2/php.ini
-
 # enable opcache
 RUN sed -i 's/;opcache.enable=0/opcache.enable=1/g' /etc/php5/apache2/php.ini
 
