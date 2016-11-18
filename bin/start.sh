@@ -15,19 +15,13 @@ cd ${LARAVEL_WWW_PATH}
 # clear leftover pid files from interrupted containers
 rm -f /var/run/apache2/apache2.pid
 
-# check for the leader marker
-# more info: http://manmakeweb.com/2016/03/29/transitioning-to-rails-docker-and-elastic-beanstalk/
-# if the dir doesn't exist, we assume the check hasn't been implemented and that it's a single host
-if [ ! -d /tmp/leader_check -o -f /tmp/leader_check/is_leader ]
-then
-    # ensure that the environment we're running in has had db updates applied
-    if [ "$RUN_MIGRATE_FORCED" == 1 -o "${RUN_MIGRATE_FORCED,,}" == 'true' ] ; then
-        php artisan migrate --force
-    elif [ "$RUN_MIGRATE" == 1 -o "${RUN_MIGRATE,,}" == 'true' ] ; then
-        php artisan migrate
-    fi
-else
-    echo "Skipping database migrations. /tmp/leader_check exists, but we're not the leader"
+# todo: lock the db while migrations run to prevent other instances from running migrate simultaneously
+# beanstalk's leader_only isn't a guarantee, so maybe we use a db lock instead somehow?
+# ensure that the environment we're running in has had db updates applied
+if [ "$RUN_MIGRATE_FORCED" == 1 -o "${RUN_MIGRATE_FORCED,,}" == 'true' ] ; then
+    php artisan migrate --force
+elif [ "$RUN_MIGRATE" == 1 -o "${RUN_MIGRATE,,}" == 'true' ] ; then
+    php artisan migrate
 fi
 
 # start processes

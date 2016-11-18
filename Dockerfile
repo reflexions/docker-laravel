@@ -12,18 +12,32 @@ COPY ./home/.bashrc /root/.bashrc
 RUN echo deb http://www.deb-multimedia.org jessie main non-free >> /etc/apt/sources.list \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install deb-multimedia-keyring --force-yes --assume-yes \
-    && apt-get -y upgrade \
-    && apt-get clean
+    && apt-get -y upgrade
 
 # openssl is a dependency of apache2, but just to be clear, we list it separately
+# we use https urls for yarn, so we need apt-transport-https
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apache2 \
-        openssl \
+        apt-transport-https \
         curl \
-        locales \
         git-core \
-    && apt-get clean
+        locales \
+        openssl \
+        vim-tiny
+
+# laravel uses yarn, so let's get it
+COPY ./yarn/yarn.list /etc/apt/sources.list.d/yarn.list
+COPY ./yarn/pubkey.gpg /tmp/yarn-pubkey.gpg
+RUN apt-key add /tmp/yarn-pubkey.gpg
+
+# jessie has an old version of node (0.10.29). get version 6 (LTS) instead
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+
+RUN apt-get update \
+    && apt-get install -y \
+        nodejs \
+        yarn
 
 # Configure locales
 ENV LANGUAGE en_US.UTF-8
@@ -40,8 +54,7 @@ RUN c_rehash /etc/ssl/certs # requires openssl
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         ffmpeg \
-        imagemagick \
-    && apt-get clean
+        imagemagick
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -58,7 +71,6 @@ RUN apt-get update \
         php5-pgsql \
         php5-redis \
         php5-sqlite \
-    && apt-get clean \
     && a2enmod php5 \
     && a2enmod rewrite
 
@@ -69,37 +81,37 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer
 
 # set timezone to Eastern
-RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/cli/php.ini
-RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/apache2/php.ini
+RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/cli/php.ini \
+    && sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/New_York/g' /etc/php5/apache2/php.ini
 
 # turn off persistent connections
-RUN sed -i 's/mysql.allow_persistent = On/mysql.allow_persistent = Off/g' /etc/php5/cli/php.ini
-RUN sed -i 's/mysql.allow_persistent = On/mysql.allow_persistent = Off/g' /etc/php5/apache2/php.ini
-RUN sed -i 's/pgsql.allow_persistent = On/pgsql.allow_persistent = Off/g' /etc/php5/cli/php.ini
-RUN sed -i 's/pgsql.allow_persistent = On/pgsql.allow_persistent = Off/g' /etc/php5/apache2/php.ini
+RUN sed -i 's/mysql.allow_persistent = On/mysql.allow_persistent = Off/g' /etc/php5/cli/php.ini \
+    && sed -i 's/mysql.allow_persistent = On/mysql.allow_persistent = Off/g' /etc/php5/apache2/php.ini \
+    && sed -i 's/pgsql.allow_persistent = On/pgsql.allow_persistent = Off/g' /etc/php5/cli/php.ini \
+    && sed -i 's/pgsql.allow_persistent = On/pgsql.allow_persistent = Off/g' /etc/php5/apache2/php.ini
 
 # increase memory limit. cli gets more than apache.
-RUN sed -i 's/memory_limit = 128M/memory_limit = 1G/g' /etc/php5/cli/php.ini
-RUN sed -i 's/memory_limit = 128M/memory_limit = 256M/g' /etc/php5/apache2/php.ini
+RUN sed -i 's/memory_limit = 128M/memory_limit = 1G/g' /etc/php5/cli/php.ini \
+    && sed -i 's/memory_limit = 128M/memory_limit = 256M/g' /etc/php5/apache2/php.ini
 
 # allow bigger uploads
-RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 200M/g' /etc/php5/apache2/php.ini
-RUN sed -i 's/post_max_size = 8M/post_max_size = 200M/g' /etc/php5/apache2/php.ini
+RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 200M/g' /etc/php5/apache2/php.ini \
+    && sed -i 's/post_max_size = 8M/post_max_size = 200M/g' /etc/php5/apache2/php.ini
 
 # safer sessions
-RUN sed -i 's/session.use_strict_mode = 0/session.use_strict_mode = 1/g' /etc/php5/apache2/php.ini
-RUN sed -i 's/session.cookie_httponly =/session.cookie_httponly = 1/g' /etc/php5/apache2/php.ini
+RUN sed -i 's/session.use_strict_mode = 0/session.use_strict_mode = 1/g' /etc/php5/apache2/php.ini \
+    && sed -i 's/session.cookie_httponly =/session.cookie_httponly = 1/g' /etc/php5/apache2/php.ini \
+    && sed -i 's/session.hash_function = 0/session.hash_function = 1/g' /etc/php5/apache2/php.ini \
+    && sed -i 's/session.hash_bits_per_character = 5/session.hash_bits_per_character = 6/g' /etc/php5/apache2/php.ini
+
 # we're not running cron, so we have to gc sessions after requests
 RUN sed -i 's/session.gc_probability = 0/session.gc_probability = 1/g' /etc/php5/apache2/php.ini
-RUN sed -i 's/session.hash_function = 0/session.hash_function = 1/g' /etc/php5/apache2/php.ini
-RUN sed -i 's/session.hash_bits_per_character = 5/session.hash_bits_per_character = 6/g' /etc/php5/apache2/php.ini
 
 # better multibyte char support
 RUN sed -i 's/;mbstring.func_overload = 0/mbstring.func_overload = 7/g' /etc/php5/apache2/php.ini
 
 # enable opcache
 RUN sed -i 's/;opcache.enable=0/opcache.enable=1/g' /etc/php5/apache2/php.ini
-
 
 # start and setup scripts
 # setup script runs on container startup to utilize GITHUB_TOKEN env variable
