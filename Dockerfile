@@ -19,9 +19,6 @@ COPY ./yarn/yarn.list /etc/apt/sources.list.d/yarn.list
 COPY ./yarn/pubkey.gpg /tmp/yarn-pubkey.gpg
 RUN apt-key add /tmp/yarn-pubkey.gpg
 
-# jessie has an old version of node (0.10.29). get version 6 (LTS) instead
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
-
 # openssl is a dependency of apache2, but just to be clear, we list it separately
 # we use https urls for yarn, so we need apt-transport-https
 RUN apt-get update \
@@ -31,9 +28,15 @@ RUN apt-get update \
         curl \
         git-core \
         locales \
-        nodejs \
         openssl \
-        vim-tiny \
+        vim-tiny
+
+# jessie has an old version of node (0.10.29). get version 6 (LTS) instead
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+
+RUN apt-get update \
+    && apt-get install -y \
+        nodejs \
         yarn
 
 # Configure locales
