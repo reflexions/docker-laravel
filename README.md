@@ -27,7 +27,7 @@ laravel:
     - .:/var/www/laravel
 
 database:
-  image: postgres:9.4.4
+  image: postgres:9.6
   ports:
     - 5432:5432
   env_file: .env

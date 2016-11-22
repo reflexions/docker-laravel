@@ -14,6 +14,14 @@ RUN echo deb http://www.deb-multimedia.org jessie main non-free >> /etc/apt/sour
     && DEBIAN_FRONTEND=noninteractive apt-get install deb-multimedia-keyring --force-yes --assume-yes \
     && apt-get -y upgrade
 
+# laravel uses yarn, so let's get it
+COPY ./yarn/yarn.list /etc/apt/sources.list.d/yarn.list
+COPY ./yarn/pubkey.gpg /tmp/yarn-pubkey.gpg
+RUN apt-key add /tmp/yarn-pubkey.gpg
+
+# jessie has an old version of node (0.10.29). get version 6 (LTS) instead
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+
 # openssl is a dependency of apache2, but just to be clear, we list it separately
 # we use https urls for yarn, so we need apt-transport-https
 RUN apt-get update \
@@ -23,20 +31,9 @@ RUN apt-get update \
         curl \
         git-core \
         locales \
-        openssl \
-        vim-tiny
-
-# laravel uses yarn, so let's get it
-COPY ./yarn/yarn.list /etc/apt/sources.list.d/yarn.list
-COPY ./yarn/pubkey.gpg /tmp/yarn-pubkey.gpg
-RUN apt-key add /tmp/yarn-pubkey.gpg
-
-# jessie has an old version of node (0.10.29). get version 6 (LTS) instead
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
-
-RUN apt-get update \
-    && apt-get install -y \
         nodejs \
+        openssl \
+        vim-tiny \
         yarn
 
 # Configure locales
