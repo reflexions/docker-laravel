@@ -27,6 +27,8 @@ chown -R www-data ${LARAVEL_BOOTSTRAP_CACHE_PATH}
 chmod -R 775 ${LARAVEL_BOOTSTRAP_CACHE_PATH}
 
 # cache the github host key in case we have to connect with ssh
+mkdir ~/.ssh/
+chmod go-rwx ~/.ssh/
 touch ~/.ssh/known_hosts
 ssh-keyscan -H github.com | sort -u - ~/.ssh/known_hosts > ~/.ssh/tmp_hosts
 mv ~/.ssh/tmp_hosts ~/.ssh/known_hosts
