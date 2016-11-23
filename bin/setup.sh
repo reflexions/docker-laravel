@@ -37,6 +37,12 @@ mv ~/.ssh/tmp_hosts ~/.ssh/known_hosts
 if [ "$GITHUB_TOKEN" != "Your_Github_Token" ]; then
 	composer config --global github-oauth.github.com $GITHUB_TOKEN
 	composer config --global repo.packagist composer https://packagist.org
+
+	# not sure why the above isn't working, so lets also tell git about it
+	GITHUB_USER=`curl -sH "Authorization: token $GITHUB_TOKEN" https://api.github.com/user | grep '"login"' | cut -d'"' -f 4`
+	git config --global credential.helper 'store'
+	echo "https://$GITHUB_USER:$GITHUB_TOKEN@github.com" > ~/.git-credentials
+	chmod go-rwx ~/.git-credentials
 	composer install
 fi
 
