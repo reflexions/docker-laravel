@@ -111,7 +111,7 @@ RUN sed -i 's/;opcache.enable=0/opcache.enable=1/g' /etc/php5/apache2/php.ini
 
 # start and setup scripts
 # setup script runs on container startup to utilize GITHUB_TOKEN env variable
-COPY ./bin /usr/share/docker-laravel/bin
+COPY . /usr/share/docker-laravel
 RUN chmod 755 \
     /usr/share/docker-laravel/bin/setup.sh \
     /usr/share/docker-laravel/bin/start.sh
