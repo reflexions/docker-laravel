@@ -35,15 +35,15 @@ mv ~/.ssh/tmp_hosts ~/.ssh/known_hosts
 
 # configure composer
 if [ "$GITHUB_TOKEN" != "Your_Github_Token" ]; then
-	composer config --global github-oauth.github.com $GITHUB_TOKEN
-	composer config --global repo.packagist composer https://packagist.org
+    composer config --global github-oauth.github.com $GITHUB_TOKEN
+    composer config --global repo.packagist composer https://packagist.org
 
-	# not sure why the above isn't working, so lets also tell git about it
-	GITHUB_USER=`curl -sH "Authorization: token $GITHUB_TOKEN" https://api.github.com/user | grep '"login"' | cut -d'"' -f 4`
-	git config --global credential.helper 'store'
-	echo "https://$GITHUB_USER:$GITHUB_TOKEN@github.com" > ~/.git-credentials
-	chmod go-rwx ~/.git-credentials
-	composer install
+    # not sure why the above isn't working, so lets also tell git about it
+    GITHUB_USER=`curl -sH "Authorization: token $GITHUB_TOKEN" https://api.github.com/user | grep '"login":' | cut -d'"' -f 4`
+    git config --global credential.helper 'store'
+    echo "https://$GITHUB_USER:$GITHUB_TOKEN@github.com" > ~/.git-credentials
+    chmod go-rwx ~/.git-credentials
+    composer install
 fi
 
 # configure apache
@@ -53,35 +53,35 @@ unlink /etc/apache2/sites-enabled/000-default.conf
 
 # maybe install laravel
 if [ ! -d "${LARAVEL_WWW_PATH}/app" ]; then
-	cd ${LARAVEL_WWW_PATH}
+    cd ${LARAVEL_WWW_PATH}
     composer create-project --prefer-dist laravel/laravel /tmp/laravel
     rm /tmp/laravel/.env
     mv /tmp/laravel/* ${LARAVEL_WWW_PATH}
     mv /tmp/laravel/.???* ${LARAVEL_WWW_PATH}
     rm -Rf /tmp/laravel
     php artisan key:generate
-	cd /usr/share/docker-laravel
+    cd /usr/share/docker-laravel
 fi
 
 # maybe composer install
 if [ ! -d "${LARAVEL_WWW_PATH}/vendor" ]; then
-	cd ${LARAVEL_WWW_PATH}
-	composer install
+    cd ${LARAVEL_WWW_PATH}
+    composer install
 fi
 
 # maybe install reflexions/docker-laravel
 #   - maybe it needs to be installed
 if [ ! -d "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
-	cd ${LARAVEL_WWW_PATH}
-	composer install
-	cd /usr/share/docker-laravel
+    cd ${LARAVEL_WWW_PATH}
+    composer install
+    cd /usr/share/docker-laravel
 fi
 #   - or maybe it needs to be required
 if [ ! -d "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
-	cd ${LARAVEL_WWW_PATH}
-	composer require reflexions/docker-laravel
-	sed -i 's/Illuminate\\Foundation\\Application/Reflexions\\DockerLaravel\\DockerApplication/g' ${LARAVEL_WWW_PATH}/bootstrap/app.php
-	cd /usr/share/docker-laravel
+    cd ${LARAVEL_WWW_PATH}
+    composer require reflexions/docker-laravel
+    sed -i 's/Illuminate\\Foundation\\Application/Reflexions\\DockerLaravel\\DockerApplication/g' ${LARAVEL_WWW_PATH}/bootstrap/app.php
+    cd /usr/share/docker-laravel
 fi
 
 # flag that setup has run

@@ -3,10 +3,13 @@ EXPOSE 80
 MAINTAINER "Reflexions" <docker-laravel@reflexions.co>
 
 # default is 'dumb'. that cripples less, vim, coloring, etc
-ENV TERM xterm-256color
+ENV TERM=xterm-256color \
+    SHELL=/bin/bash \
+    LANGUAGE=en_US.UTF-8
 
 # because I use ll all the time
 COPY ./home/.bashrc /root/.bashrc
+COPY ./home/.inputrc /root/.inputrc
 
 # ffmpeg not in debian:jessie
 RUN echo deb http://www.deb-multimedia.org jessie main non-free >> /etc/apt/sources.list \
@@ -26,6 +29,13 @@ RUN apt-get update \
         openssl \
         vim-tiny
 
+# Configure locales
+RUN echo "America/New_York" > /etc/timezone \
+    && dpkg-reconfigure -f noninteractive tzdata \
+    && echo "configuring ${LANGUAGE}" \
+    && locale-gen ${LANGUAGE} \
+    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+
 # jessie has an old version of node (0.10.29). get version 6 (LTS) instead
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 
@@ -38,13 +48,6 @@ RUN apt-get update \
     && apt-get install -y \
         yarn
 
-# Configure locales
-ENV LANGUAGE en_US.UTF-8
-RUN echo "America/New_York" > /etc/timezone \
-    && dpkg-reconfigure -f noninteractive tzdata \
-    && locale-gen ${LANGUAGE} \
-    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
-
 # Copy GTE CyberTrust Global Root certificate
 # Needed for mailchimp because of https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=812708
 COPY ./certs/gte_cybertrust_global_root.crt /etc/ssl/certs/gte_cybertrust_global_root.crt
@@ -53,10 +56,7 @@ RUN c_rehash /etc/ssl/certs # requires openssl
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         ffmpeg \
-        imagemagick
-
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        imagemagick \
         libapache2-mod-php5 \
         php-pear \
         php5 \
@@ -111,8 +111,10 @@ RUN sed -i 's/;opcache.enable=0/opcache.enable=1/g' /etc/php5/apache2/php.ini
 
 # start and setup scripts
 # setup script runs on container startup to utilize GITHUB_TOKEN env variable
-COPY . /usr/share/docker-laravel
-RUN chmod 755 /usr/share/docker-laravel/bin/setup.sh /usr/share/docker-laravel/bin/start.sh
+COPY ./bin /usr/share/docker-laravel/bin
+RUN chmod 755 \
+    /usr/share/docker-laravel/bin/setup.sh \
+    /usr/share/docker-laravel/bin/start.sh
 ENTRYPOINT ["/usr/share/docker-laravel/bin/start.sh"]
 
 # Default ENV
