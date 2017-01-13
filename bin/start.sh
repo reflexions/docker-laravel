@@ -6,7 +6,9 @@ set -x #echo on
 if [ ! -f ${LARAVEL_RUN_PATH}/setup-completed ]; then
     echo "You are required to run /usr/share/docker-laravel/bin/setup.sh in your Dockerfile before the container starts"
     echo "Also, if you haven't installed laravel yet, run /usr/share/docker-laravel/bin/new-project.sh after setup.sh"
-    exit 1
+    echo "This will be a fatal error soon"
+    /usr/share/docker-laravel/bin/setup.sh
+    #exit 1
 fi
 
 # clear leftover pid files from interrupted containers
