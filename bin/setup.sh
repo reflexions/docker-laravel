@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -x #echo on
 
+# This script sets up OS-level config. This script is run by Dockerfile before the Project dir is copied over,
+# so it doesn't expect app files to exist yet
+
 echo "-----------------------"
 echo "START setup.sh"
 echo "-----------------------"
@@ -43,45 +46,6 @@ if [ "$GITHUB_TOKEN" != "Your_Github_Token" ]; then
     git config --global credential.helper 'store'
     echo "https://$GITHUB_USER:$GITHUB_TOKEN@github.com" > ~/.git-credentials
     chmod go-rwx ~/.git-credentials
-    composer install
-fi
-
-# configure apache
-cp etc/apache2/sites-available/001-application.conf /etc/apache2/sites-available/001-application.conf
-ln -s /etc/apache2/sites-available/001-application.conf /etc/apache2/sites-enabled/
-unlink /etc/apache2/sites-enabled/000-default.conf
-
-# maybe install laravel
-if [ ! -d "${LARAVEL_WWW_PATH}/app" ]; then
-    cd ${LARAVEL_WWW_PATH}
-    composer create-project --prefer-dist laravel/laravel /tmp/laravel
-    rm /tmp/laravel/.env
-    mv /tmp/laravel/* ${LARAVEL_WWW_PATH}
-    mv /tmp/laravel/.???* ${LARAVEL_WWW_PATH}
-    rm -Rf /tmp/laravel
-    php artisan key:generate
-    cd /usr/share/docker-laravel
-fi
-
-# maybe composer install
-if [ ! -d "${LARAVEL_WWW_PATH}/vendor" ]; then
-    cd ${LARAVEL_WWW_PATH}
-    composer install
-fi
-
-# maybe install reflexions/docker-laravel
-#   - maybe it needs to be installed
-if [ ! -d "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
-    cd ${LARAVEL_WWW_PATH}
-    composer install
-    cd /usr/share/docker-laravel
-fi
-#   - or maybe it needs to be required
-if [ ! -d "${LARAVEL_WWW_PATH}/vendor/reflexions/docker-laravel" ]; then
-    cd ${LARAVEL_WWW_PATH}
-    composer require reflexions/docker-laravel
-    sed -i 's/Illuminate\\Foundation\\Application/Reflexions\\DockerLaravel\\DockerApplication/g' ${LARAVEL_WWW_PATH}/bootstrap/app.php
-    cd /usr/share/docker-laravel
 fi
 
 # flag that setup has run

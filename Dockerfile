@@ -109,12 +109,18 @@ RUN sed -i 's/session.gc_probability = 0/session.gc_probability = 1/g' /etc/php5
 # enable opcache
 RUN sed -i 's/;opcache.enable=0/opcache.enable=1/g' /etc/php5/apache2/php.ini
 
+# configure apache
+# To override this, copy your own vhost file over /etc/apache2/sites-available/001-application.conf
+COPY etc/apache2/sites-available/001-application.conf /etc/apache2/sites-available/001-application.conf
+RUN ln -s /etc/apache2/sites-available/001-application.conf /etc/apache2/sites-enabled/
+RUN unlink /etc/apache2/sites-enabled/000-default.conf
+
+COPY bin/setup.sh /usr/share/docker-laravel/bin/
+COPY bin/start.sh /usr/share/docker-laravel/bin/
+COPY bin/new-project.sh /usr/share/docker-laravel/bin/
+
 # start and setup scripts
-# setup script runs on container startup to utilize GITHUB_TOKEN env variable
-COPY . /usr/share/docker-laravel
-RUN chmod 755 \
-    /usr/share/docker-laravel/bin/setup.sh \
-    /usr/share/docker-laravel/bin/start.sh
+RUN chmod 755 /usr/share/docker-laravel/bin/*
 ENTRYPOINT ["/usr/share/docker-laravel/bin/start.sh"]
 
 # Default ENV
