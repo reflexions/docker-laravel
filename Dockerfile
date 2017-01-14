@@ -19,6 +19,7 @@ RUN echo deb http://www.deb-multimedia.org jessie main non-free >> /etc/apt/sour
 
 # openssl is a dependency of apache2, but just to be clear, we list it separately
 # we use https urls for yarn, so we need apt-transport-https
+# composer runs faster if unzip is available
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apache2 \
@@ -27,6 +28,7 @@ RUN apt-get update \
         git-core \
         locales \
         openssl \
+        unzip \
         vim-tiny
 
 # Configure locales
