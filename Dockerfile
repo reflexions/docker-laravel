@@ -44,6 +44,9 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 # laravel uses yarn, so let's get it
 COPY ./yarn/yarn.list /etc/apt/sources.list.d/yarn.list
 COPY ./yarn/pubkey.gpg /tmp/yarn-pubkey.gpg
+
+# from https://dl.yarnpkg.com/debian/pubkey.gpg
+# they rotate it from time to time
 RUN apt-key add /tmp/yarn-pubkey.gpg
 
 RUN apt-get update \
