@@ -2,14 +2,11 @@ FROM debian:jessie
 EXPOSE 80
 MAINTAINER "Reflexions" <docker-laravel@reflexions.co>
 
-# default is 'dumb'. that cripples less, vim, coloring, etc
-ENV TERM=xterm-256color \
-    SHELL=/bin/bash \
-    LANGUAGE=en_US.UTF-8
+ENV SHELL=/bin/bash \
+    LANG=en_US.utf8
 
 # because I use ll all the time
-COPY ./home/.bashrc /root/.bashrc
-COPY ./home/.inputrc /root/.inputrc
+COPY ./home/.bashrc ./home/.inputrc /root/
 
 # ffmpeg not in debian:jessie
 RUN echo deb http://www.deb-multimedia.org jessie main non-free >> /etc/apt/sources.list \
@@ -49,10 +46,6 @@ COPY ./yarn/pubkey.gpg /tmp/yarn-pubkey.gpg
 # they rotate it from time to time
 RUN apt-key add /tmp/yarn-pubkey.gpg
 
-RUN apt-get update \
-    && apt-get install -y \
-        yarn
-
 # Copy GTE CyberTrust Global Root certificate
 # Needed for mailchimp because of https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=812708
 COPY ./certs/gte_cybertrust_global_root.crt /etc/ssl/certs/gte_cybertrust_global_root.crt
@@ -75,6 +68,7 @@ RUN apt-get update \
         php5-pgsql \
         php5-redis \
         php5-sqlite \
+        yarn \
     && a2enmod php5 \
     && a2enmod rewrite
 
@@ -120,12 +114,9 @@ COPY etc/apache2/sites-available/001-application.conf /etc/apache2/sites-availab
 RUN ln -s /etc/apache2/sites-available/001-application.conf /etc/apache2/sites-enabled/
 RUN unlink /etc/apache2/sites-enabled/000-default.conf
 
-COPY bin/setup.sh /usr/share/docker-laravel/bin/
-COPY bin/start.sh /usr/share/docker-laravel/bin/
-COPY bin/new-project.sh /usr/share/docker-laravel/bin/
+COPY bin/setup.sh bin/start.sh bin/new-project.sh /usr/share/docker-laravel/bin/
 
 # start and setup scripts
-RUN chmod 755 /usr/share/docker-laravel/bin/*
 ENTRYPOINT ["/usr/share/docker-laravel/bin/start.sh"]
 
 # Default ENV
