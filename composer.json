@@ -1,7 +1,7 @@
 {
     "name": "reflexions/docker-laravel",
     "description": "Provides Docker and Elastic Beanstalk integration for a Laravel 5 project",
-    "license": "proprietary",
+    "license": "LGPL-2.1-or-later",
     "authors": [
         {
             "name": "Reflexions",
